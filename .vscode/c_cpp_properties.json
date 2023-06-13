@@ -1,0 +1,35 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/opt/ros/melodic/include/**",
+        "/usr/include/",
+        "/usr/include/*",
+        "/usr/local/include/",
+        "/usr/local/cuda/include/",
+        "/home/pcb/TensorRT-8.2.5.1/include/",
+        "${workspaceFolder}/include/",
+        "${workspaceFolder}/FaceRecognition/**",
+        "${workspaceFolder}/FaceAlgorithm/face_detect",
+        "${workspaceFolder}/FaceRecognition/face_detect_yolov5face",
+        "${workspaceFolder}/FaceRecognition/face_recognition",
+        "${workspaceFolder}/FaceRecognition/gender_age_recognition",
+        "${workspaceFolder}/FaceRecognition/mask_recognition",
+        "${workspaceFolder}/FaceRecognition/silent_face_anti_spoofing",
+        "${workspaceFolder}/common/*",
+        "${workspaceFolder}/include/*",
+        "${workspaceFolder}/include/Eigen"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++17"
+    }
+  ],
+  "version": 4
+}

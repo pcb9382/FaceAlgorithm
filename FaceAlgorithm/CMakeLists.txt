@@ -1,0 +1,9 @@
+﻿cmake_minimum_required (VERSION 3.8)
+add_subdirectory ("face_detect")
+add_subdirectory ("face_detect_yolov5face")
+add_subdirectory ("face_recognition")
+add_subdirectory ("mask_recognition")
+add_subdirectory ("gender_age_recognition")
+add_subdirectory ("silent_face_anti_spoofing")
+add_subdirectory("lib")
+
