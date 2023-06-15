@@ -39,9 +39,9 @@ class Detector
 public:
     Detector();
     ~Detector();
-    HZRESULT InitDetector(Config&config);
-    HZRESULT detect(std::vector<cv::Mat>&ImgVec,std::vector<std::vector<Det>>&dets);
-    HZRESULT ReleaseDetector();
+    HZFLAG InitDetector(Config&config);
+    HZFLAG detect(std::vector<cv::Mat>&ImgVec,std::vector<std::vector<Det>>&dets);
+    HZFLAG ReleaseDetector();
 
 public:
     Logger gLogger;

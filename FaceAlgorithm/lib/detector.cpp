@@ -11,7 +11,7 @@ Detector::~Detector()
 
 }
 
-HZRESULT Detector::InitDetector(Config& config)
+HZFLAG Detector::InitDetector(Config& config)
 {
 
     conf_thresh=config.confidence_thresh;
@@ -93,7 +93,7 @@ HZRESULT Detector::InitDetector(Config& config)
     return HZ_SUCCESS;
 }
 
-HZRESULT Detector::detect(std::vector<cv::Mat>&ImgVec,std::vector<std::vector<Det>>&dets)
+HZFLAG Detector::detect(std::vector<cv::Mat>&ImgVec,std::vector<std::vector<Det>>&dets)
 {
     
     // prepare input data ---------------------------
@@ -142,7 +142,7 @@ HZRESULT Detector::detect(std::vector<cv::Mat>&ImgVec,std::vector<std::vector<De
     return HZ_SUCCESS;
 
 }
-HZRESULT Detector::ReleaseDetector()
+HZFLAG Detector::ReleaseDetector()
 {
     cudaStreamDestroy(stream);
     CHECK(cudaFree(buffers[inputIndex]));

@@ -5,7 +5,7 @@
 #include <utility>
 #include <time.h>
 #include <string>
-enum HZRESULT
+enum HZFLAG
 {
 	HZ_FILEOPENFAILED,            //文件打开失败
 	HZ_IMGEMPTY,                  //图像为空

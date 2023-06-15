@@ -48,9 +48,9 @@ class Detector_Yolov5Face
 public:
     Detector_Yolov5Face();
     ~Detector_Yolov5Face();
-    HZRESULT InitDetector_Yolov5Face(Config&config);
-    HZRESULT Detect_Yolov5Face(std::vector<cv::Mat>&ImgVec,std::vector<std::vector<Det>>&dets);
-    HZRESULT ReleaseDetector_Yolov5Face();
+    HZFLAG InitDetector_Yolov5Face(Config&config);
+    HZFLAG Detect_Yolov5Face(std::vector<cv::Mat>&ImgVec,std::vector<std::vector<Det>>&dets);
+    HZFLAG ReleaseDetector_Yolov5Face();
 
 public:
     Logger gLogger;

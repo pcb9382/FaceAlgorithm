@@ -7,7 +7,7 @@ SilentFaceAntiSpoofing::SilentFaceAntiSpoofing()
 SilentFaceAntiSpoofing::~SilentFaceAntiSpoofing()
 {
 }
-HZRESULT SilentFaceAntiSpoofing:: SilentFaceAntiSpoofingInit(Config&config)
+HZFLAG SilentFaceAntiSpoofing:: SilentFaceAntiSpoofingInit(Config&config)
 {
 	INPUT_BLOB_NAME = "input.1";
 	OUTPUT_BLOB_NAME = "523";
@@ -63,7 +63,7 @@ HZRESULT SilentFaceAntiSpoofing:: SilentFaceAntiSpoofingInit(Config&config)
 
 	return HZ_SUCCESS;
 }
-HZRESULT SilentFaceAntiSpoofing::SilentFaceAntiSpoofingRun(cv::Mat&img, SilentFace&silentface)
+HZFLAG SilentFaceAntiSpoofing::SilentFaceAntiSpoofingRun(cv::Mat&img, SilentFace&silentface)
 {
 	
 	if (img.empty())
@@ -94,7 +94,7 @@ HZRESULT SilentFaceAntiSpoofing::SilentFaceAntiSpoofingRun(cv::Mat&img, SilentFa
 	softmax(prob,silentface);
 	return HZ_SUCCESS;
 }
-HZRESULT SilentFaceAntiSpoofing::SilentFaceAntiSpoofingRelease()
+HZFLAG SilentFaceAntiSpoofing::SilentFaceAntiSpoofingRelease()
 {
 	context->destroy();
 	engine->destroy();

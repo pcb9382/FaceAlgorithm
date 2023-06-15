@@ -15,35 +15,35 @@ extern "C" {
 /** 
  * @brief                   人脸初始化函数
  * @param config			模块配置参数结构体
- * @return                  HZRESULT
+ * @return                  HZFLAG
  */
-HZRESULT Initialize(Config& config);
+HZFLAG Initialize(Config& config);
 
 
 /** 
  * @brief                   人脸检测
  * @param img			    opencv　Mat格式
  * @param FaceDets		    人脸检测结果列表，包括人脸bbox，置信度，五个关键点坐标
- * @return                  HZRESULT
+ * @return                  HZFLAG
  */		
-HZRESULT Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
+HZFLAG Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
 
 
 /** 
  * @brief                   人脸检测(yolov5_face)
  * @param img			    opencv　Mat格式
  * @param FaceDets		    人脸检测结果列表，包括人脸bbox，置信度，五个关键点坐标
- * @return                  HZRESULT
+ * @return                  HZFLAG
  */		
-HZRESULT Yolov5Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
+HZFLAG Yolov5Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
 
 /** 
  * @brief                   人脸检测跟踪(视频流)
  * @param img			    opencv　Mat格式
  * @param FaceDets		    FaceDets	人脸检测结果列表，包括人脸bbox，id,置信度，偏航角度，俯仰角度，五个关键点坐标
- * @return                  HZRESULT
+ * @return                  HZFLAG
  */	
-HZRESULT Face_Detect_Tracker(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
+HZFLAG Face_Detect_Tracker(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
 
 
 /** 
@@ -51,17 +51,17 @@ HZRESULT Face_Detect_Tracker(std::vector<cv::Mat>&img, std::vector<std::vector<F
  * @param Faceimg           需要矫正的人脸图像(矩形框bbox外扩1.2倍得到的人脸图像然后进行矫正!!!!)
  * @param KeyPoints         人脸关键点
  * @param Face_Aligener		矫正之后的图像
- * @return                  HZRESULT
+ * @return                  HZFLAG
  */	
-HZRESULT Face_Aligner(cv::Mat&Face_image,cv::Point2f *KeyPoints,cv::Mat&Face_Aligener);
+HZFLAG Face_Aligner(cv::Mat&Face_image,cv::Point2f *KeyPoints,cv::Mat&Face_Aligener);
 
 /** 
  * @brief                   人脸特征提取
  * @param Face_Aligener     经过人脸矫正的人脸图像
  * @param Face_Feature		人脸特征(512维特征)
- * @return                  HZRESULT
+ * @return                  HZFLAG
  */		
-HZRESULT Face_Feature_Extraction(cv::Mat&Face_Aligener,Feature&Face_Feature);
+HZFLAG Face_Feature_Extraction(cv::Mat&Face_Aligener,Feature&Face_Feature);
 
 
 /** 
@@ -76,31 +76,31 @@ float Cal_Score(Feature&Feature1,Feature&Feature2);
  * @brief                   人脸戴口罩识别
  * @param img               需要识别的人脸戴口罩图像
  * @param Result            人脸戴口罩识别结果
- * @return                  HZRESULT
+ * @return                  HZFLAG
  */
-HZRESULT Mask_Recognition(cv::Mat &img,float&pred);
+HZFLAG Mask_Recognition(cv::Mat &img,float&pred);
 
 /** 
  * @brief                   性别年龄识别
  * @param img               需要识别的人脸图像
  * @param Result            人脸戴口罩识别结果
- * @return                  HZRESULT
+ * @return                  HZFLAG
  */
-HZRESULT Gender_Age_Recognition(cv::Mat &img,attribute&gender_age);
+HZFLAG Gender_Age_Recognition(cv::Mat &img,attribute&gender_age);
 
 /** 
  * @brief                   静默活体检测
  * @param img               需要检测的人脸图像
  * @param Result            静默活体检测识别结果
- * @return                  HZRESULT
+ * @return                  HZFLAG
  */
-HZRESULT Silent_Face_Anti_Spoofing(cv::Mat&img, SilentFace&silentface);
+HZFLAG Silent_Face_Anti_Spoofing(cv::Mat&img, SilentFace&silentface);
 
 /** 
  * @brief               反初始化
  * @return               
  */		
-HZRESULT Release(Config& config);
+HZFLAG Release(Config& config);
 
 #ifdef __cplusplus 
 } 

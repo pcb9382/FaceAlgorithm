@@ -43,9 +43,9 @@ class Recognition
 public:
     Recognition();
     ~Recognition();
-    HZRESULT InitRecognition(Config&config);
-    HZRESULT Extract_feature(cv::Mat&ImgVec,Feature&feature);                               //特征提取
-    HZRESULT ReleaseRecognition();
+    HZFLAG InitRecognition(Config&config);
+    HZFLAG Extract_feature(cv::Mat&ImgVec,Feature&feature);                               //特征提取
+    HZFLAG ReleaseRecognition();
 
 public:
     int gpu_id;  // GPU id

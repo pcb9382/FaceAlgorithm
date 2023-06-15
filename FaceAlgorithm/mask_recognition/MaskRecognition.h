@@ -33,9 +33,9 @@ class MaskRecognition
 public:
 	MaskRecognition();
 	~MaskRecognition();
-	HZRESULT MaskRecognitionInit(Config&config);
-	HZRESULT MaskRecognitionRun(cv::Mat&img, float&pred);
-	HZRESULT MaskRecognitionRelease();
+	HZFLAG MaskRecognitionInit(Config&config);
+	HZFLAG MaskRecognitionRun(cv::Mat&img, float&pred);
+	HZFLAG MaskRecognitionRelease();
 private:
 	char* INPUT_BLOB_NAME;
 	char* OUTPUT_BLOB_NAME;

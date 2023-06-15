@@ -33,9 +33,9 @@ class GenderAgeRecognition
 public:
 	GenderAgeRecognition();
 	~GenderAgeRecognition();
-	HZRESULT GenderAgeRecognitionInit(Config&config);
-	HZRESULT GenderAgeRecognitionRun(cv::Mat&img, attribute&gender_age);
-	HZRESULT GenderAgeRecognitionRelease();
+	HZFLAG GenderAgeRecognitionInit(Config&config);
+	HZFLAG GenderAgeRecognitionRun(cv::Mat&img, attribute&gender_age);
+	HZFLAG GenderAgeRecognitionRelease();
 private:
 	char* INPUT_BLOB_NAME;
 	char* OUTPUT_BLOB_NAME;

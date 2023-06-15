@@ -33,9 +33,9 @@ class SilentFaceAntiSpoofing
 public:
 	SilentFaceAntiSpoofing();
 	~SilentFaceAntiSpoofing();
-	HZRESULT SilentFaceAntiSpoofingInit(Config&config);
-	HZRESULT SilentFaceAntiSpoofingRun(cv::Mat&img, SilentFace&silentface);
-	HZRESULT SilentFaceAntiSpoofingRelease();
+	HZFLAG SilentFaceAntiSpoofingInit(Config&config);
+	HZFLAG SilentFaceAntiSpoofingRun(cv::Mat&img, SilentFace&silentface);
+	HZFLAG SilentFaceAntiSpoofingRelease();
 private:
 	char* INPUT_BLOB_NAME;
 	char* OUTPUT_BLOB_NAME;

@@ -7,7 +7,7 @@ MaskRecognition::MaskRecognition()
 MaskRecognition::~MaskRecognition()
 {
 }
-HZRESULT MaskRecognition:: MaskRecognitionInit(Config&config)
+HZFLAG MaskRecognition:: MaskRecognitionInit(Config&config)
 {
 	INPUT_BLOB_NAME = "images";
 	OUTPUT_BLOB_NAME = "output";
@@ -66,7 +66,7 @@ HZRESULT MaskRecognition:: MaskRecognitionInit(Config&config)
 
 	return HZ_SUCCESS;
 }
-HZRESULT MaskRecognition::MaskRecognitionRun(cv::Mat&img, float&pred)
+HZFLAG MaskRecognition::MaskRecognitionRun(cv::Mat&img, float&pred)
 {
 	
 	if (img.empty())
@@ -97,7 +97,7 @@ HZRESULT MaskRecognition::MaskRecognitionRun(cv::Mat&img, float&pred)
 	pred=preds[0];
 	return HZ_SUCCESS;
 }
-HZRESULT MaskRecognition::MaskRecognitionRelease()
+HZFLAG MaskRecognition::MaskRecognitionRelease()
 {
 	context->destroy();
 	engine->destroy();

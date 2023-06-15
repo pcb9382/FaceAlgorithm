@@ -11,7 +11,7 @@ Detector_Yolov5Face::~Detector_Yolov5Face()
 
 }
 
-HZRESULT Detector_Yolov5Face::InitDetector_Yolov5Face(Config& config)
+HZFLAG Detector_Yolov5Face::InitDetector_Yolov5Face(Config& config)
 {
 
     this->conf_thresh=config.yolov5face_confidence_thresh;
@@ -85,7 +85,7 @@ HZRESULT Detector_Yolov5Face::InitDetector_Yolov5Face(Config& config)
     return HZ_SUCCESS;
 }
 
-HZRESULT Detector_Yolov5Face::Detect_Yolov5Face(std::vector<cv::Mat>&ImgVec,std::vector<std::vector<Det>>& dets)
+HZFLAG Detector_Yolov5Face::Detect_Yolov5Face(std::vector<cv::Mat>&ImgVec,std::vector<std::vector<Det>>& dets)
 {
     
     // prepare input data ---------------------------
@@ -154,7 +154,7 @@ HZRESULT Detector_Yolov5Face::Detect_Yolov5Face(std::vector<cv::Mat>&ImgVec,std:
     return HZ_SUCCESS;
 
 }
-HZRESULT Detector_Yolov5Face::ReleaseDetector_Yolov5Face()
+HZFLAG Detector_Yolov5Face::ReleaseDetector_Yolov5Face()
 {
     cudaStreamDestroy(stream);
     CHECK(cudaFree(buffers[inputIndex]));

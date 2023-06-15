@@ -11,7 +11,7 @@ Recognition::~Recognition()
 
 }
 
-HZRESULT Recognition::InitRecognition(Config&config)
+HZFLAG Recognition::InitRecognition(Config&config)
 {
     INPUT_H = 112;
     INPUT_W = 112;
@@ -95,7 +95,7 @@ HZRESULT Recognition::InitRecognition(Config&config)
     prob=new float[OUTPUT_SIZE];
     return HZ_SUCCESS;
 }  
-HZRESULT Recognition::Extract_feature(cv::Mat&img,Feature&feature)
+HZFLAG Recognition::Extract_feature(cv::Mat&img,Feature&feature)
 {
     if (img.empty()||img.data==NULL)
     {
@@ -119,7 +119,7 @@ HZRESULT Recognition::Extract_feature(cv::Mat&img,Feature&feature)
     }
     return HZ_SUCCESS;
 }
-HZRESULT Recognition::ReleaseRecognition()
+HZFLAG Recognition::ReleaseRecognition()
 {
     context->destroy();
     engine->destroy();

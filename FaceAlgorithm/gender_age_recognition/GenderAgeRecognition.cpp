@@ -7,7 +7,7 @@ GenderAgeRecognition::GenderAgeRecognition()
 GenderAgeRecognition::~GenderAgeRecognition()
 {
 }
-HZRESULT GenderAgeRecognition:: GenderAgeRecognitionInit(Config&config)
+HZFLAG GenderAgeRecognition:: GenderAgeRecognitionInit(Config&config)
 {
 	INPUT_BLOB_NAME = "data";
 	OUTPUT_BLOB_NAME = "fc1";
@@ -66,7 +66,7 @@ HZRESULT GenderAgeRecognition:: GenderAgeRecognitionInit(Config&config)
 
 	return HZ_SUCCESS;
 }
-HZRESULT GenderAgeRecognition::GenderAgeRecognitionRun(cv::Mat&img, attribute&gender_age)
+HZFLAG GenderAgeRecognition::GenderAgeRecognitionRun(cv::Mat&img, attribute&gender_age)
 {
 	
 	if (img.empty())
@@ -104,7 +104,7 @@ HZRESULT GenderAgeRecognition::GenderAgeRecognitionRun(cv::Mat&img, attribute&ge
 	}
 	return HZ_SUCCESS;
 }
-HZRESULT GenderAgeRecognition::GenderAgeRecognitionRelease()
+HZFLAG GenderAgeRecognition::GenderAgeRecognitionRelease()
 {
 	context->destroy();
 	engine->destroy();
