@@ -177,11 +177,11 @@ set(TensorRT_LIB "/xxx/xxx/TensorRT-8.2.5.1/lib" CACHE INTERNAL "TensorRT Librar
 2. 默认opencv已安装，cuda,cudnn已安装
 3. 为了Debug默认编译 ```-g O0``` 版本,如果为了加快速度请编译Release版本
 
-4. 使用Visual Studio Code
+4. 使用Visual Studio Code快捷键编译(4,5二选其一):
 ```
    ctrl+shift+B
 ```
-5. 使用命令行编译:
+5. 使用命令行编译(4,5二选其一):
 ```
    mkdir build
    cd build
