@@ -6,7 +6,6 @@
         "limitSymbolsToIncludedHeaders": false
       },
       "includePath": [
-        "/opt/ros/melodic/include/**",
         "/usr/include/",
         "/usr/include/*",
         "/usr/local/include/",
