@@ -197,6 +197,7 @@ set(TensorRT_LIB "/xxx/xxx/TensorRT-8.2.5.1/lib" CACHE INTERNAL "TensorRT Librar
 4. https://github.com/linghu8812/tensorrt_inference
 
 # Acknowledgments & Contact 
-## 1.QQ Group：517671804
+## 1.WeChat ID: cbp931126
+加我微信(备注：FaceAlgorithm),拉你进群
+## 2.QQ Group：517671804
 ![](resources/QQGroup.jpeg)
-## 2.WeChat ID: cbp931126
