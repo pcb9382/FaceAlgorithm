@@ -20,7 +20,7 @@
 	5)人脸特征比对(人脸相似度计算)
 
 6. 条件编译测试说明
-	| 测试哦种类 |  启用    |  说明   |
+	| 测试种类 |  启用    |  说明   |
 	|:----------|:----------|:----------|
     |face_detect                       |1|           人脸检测                         |
     |yolov5face_detect				   |1|           yolov5face 人脸检测              |
@@ -30,7 +30,7 @@
     |mask_recognition                  |1|           口罩识别                         |
     |gender_age_recognition            |1|           性别年龄识别                      |
     |silnet_face_anti_spoofing         |1|           静默活体检测                      |
-    |
+
 ## 算法说明
 ### 1.人脸检测
 1. retinaface(mobilenet0.25，R50需要自己修改代码）
@@ -55,6 +55,98 @@
 ### 6.跟踪
 1. ByteTracker(加上人脸bbox和人脸关键点作为跟踪的输入，修改Bug)
 
+### 7.算法接口
+```
+/** 
+ * @brief                   人脸初始化函数
+ * @param config			模块配置参数结构体
+ * @return                  HZFLAG
+ */
+HZFLAG Initialize(Config& config);
+
+
+/** 
+ * @brief                   人脸检测
+ * @param img			    opencv　Mat格式
+ * @param FaceDets		    人脸检测结果列表，包括人脸bbox，置信度，五个关键点坐标
+ * @return                  HZFLAG
+ */		
+HZFLAG Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
+
+
+/** 
+ * @brief                   人脸检测(yolov5_face)
+ * @param img			    opencv　Mat格式
+ * @param FaceDets		    人脸检测结果列表，包括人脸bbox，置信度，五个关键点坐标
+ * @return                  HZFLAG
+ */		
+HZFLAG Yolov5Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
+
+/** 
+ * @brief                   人脸检测跟踪(视频流)
+ * @param img			    opencv　Mat格式
+ * @param FaceDets		    FaceDets	人脸检测结果列表，包括人脸bbox，id,置信度，偏航角度，俯仰角度，五个关键点坐标
+ * @return                  HZFLAG
+ */	
+HZFLAG Face_Detect_Tracker(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
+
+
+/** 
+ * @brief                   人脸矫正
+ * @param Faceimg           需要矫正的人脸图像(矩形框bbox外扩1.2倍得到的人脸图像然后进行矫正!!!!)
+ * @param KeyPoints         人脸关键点
+ * @param Face_Aligener		矫正之后的图像
+ * @return                  HZFLAG
+ */	
+HZFLAG Face_Aligner(cv::Mat&Face_image,cv::Point2f *KeyPoints,cv::Mat&Face_Aligener);
+
+/** 
+ * @brief                   人脸特征提取
+ * @param Face_Aligener     经过人脸矫正的人脸图像
+ * @param Face_Feature		人脸特征(512维特征)
+ * @return                  HZFLAG
+ */		
+HZFLAG Face_Feature_Extraction(cv::Mat&Face_Aligener,Feature&Face_Feature);
+
+
+/** 
+ * @brief               计算人脸特征的相似度
+ * @param Feature1      经过人脸矫正的人脸图像
+ * @param Feature2		人脸特征(512维特征)
+ * @return float		相似度得分               
+ */	
+float Cal_Score(Feature&Feature1,Feature&Feature2);
+
+/** 
+ * @brief                   人脸戴口罩识别
+ * @param img               需要识别的人脸戴口罩图像
+ * @param Result            人脸戴口罩识别结果
+ * @return                  HZFLAG
+ */
+HZFLAG Mask_Recognition(cv::Mat &img,float&pred);
+
+/** 
+ * @brief                   性别年龄识别
+ * @param img               需要识别的人脸图像
+ * @param Result            性别年龄识别别结果
+ * @return                  HZFLAG
+ */
+HZFLAG Gender_Age_Recognition(cv::Mat &img,attribute&gender_age);
+
+/** 
+ * @brief                   静默活体检测
+ * @param img               需要检测的人脸图像
+ * @param Result            静默活体检测识别结果
+ * @return                  HZFLAG
+ */
+HZFLAG Silent_Face_Anti_Spoofing(cv::Mat&img, SilentFace&silentface);
+
+/** 
+ * @brief               反初始化
+ * @return              HZFLAG
+ */		
+HZFLAG Release(Config& config);
+```
 # 使用方法
 ## 1.模型下载
 ([Baidu Drive](https://pan.baidu.com/s/1c8NQO2cZpAqwEMbfZxsJZg) code: 5xaa)
@@ -67,7 +159,6 @@
 |yolov5s-face_bs=1.onnx                |yolov5s人脸检测|          
 |yolov5s-face_bs=4.onnx                |yolov5s人脸检测|        
 |2.7_80x80_MiniFASNetV2.onnx           |静默活体检测|           
-|
 
 ## 2.环境
 1. ubuntu20.04+cuda11.1+cudnn8.2.1+TrnsorRT8.2.5.1(测试通过)
@@ -78,14 +169,19 @@
 
 ## 3.编译
 
-1. 更改根目录下的CCMakeLists.txt,设置tensorrt的安装目录
+1. 更改根目录下的CMakeLists.txt,设置tensorrt的安装目录
+```
+set(TensorRT_INCLUDE "/xxx/xxx/TensorRT-8.2.5.1/include" CACHE INTERNAL "TensorRT Library include location")
+set(TensorRT_LIB "/xxx/xxx/TensorRT-8.2.5.1/lib" CACHE INTERNAL "TensorRT Library lib location")
+```
 2. 默认opencv已安装，cuda,cudnn已安装
 3. 为了Debug默认编译 ```-g O0``` 版本,如果为了加快速度请编译Release版本
-4. 使用Visual Studio Code: 如有其他需要可以修改tasks.json的command命令
+
+4. 使用Visual Studio Code
 ```
    ctrl+shift+B
 ```
-1. 使用命令行编译:
+5. 使用命令行编译:
 ```
    mkdir build
    cd build

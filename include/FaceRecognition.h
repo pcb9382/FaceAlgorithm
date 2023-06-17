@@ -83,7 +83,7 @@ HZFLAG Mask_Recognition(cv::Mat &img,float&pred);
 /** 
  * @brief                   性别年龄识别
  * @param img               需要识别的人脸图像
- * @param Result            人脸戴口罩识别结果
+ * @param Result            性别年龄识别结果
  * @return                  HZFLAG
  */
 HZFLAG Gender_Age_Recognition(cv::Mat &img,attribute&gender_age);
@@ -98,7 +98,7 @@ HZFLAG Silent_Face_Anti_Spoofing(cv::Mat&img, SilentFace&silentface);
 
 /** 
  * @brief               反初始化
- * @return               
+ * @return              HZFLAG 
  */		
 HZFLAG Release(Config& config);
 
