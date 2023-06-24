@@ -38,6 +38,14 @@ HZFLAG Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&F
 HZFLAG Yolov5Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
 
 /** 
+ * @brief                   人脸检测(yolov5_face)
+ * @param img			    opencv　Mat格式
+ * @param FaceDets		    人脸检测结果列表，包括人脸bbox，置信度，五个关键点坐标
+ * @return                  HZFLAG
+ */		
+HZFLAG Yolov7Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
+
+/** 
  * @brief                   人脸检测跟踪(视频流)
  * @param img			    opencv　Mat格式
  * @param FaceDets		    FaceDets	人脸检测结果列表，包括人脸bbox，id,置信度，偏航角度，俯仰角度，五个关键点坐标

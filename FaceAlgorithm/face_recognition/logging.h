@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TENSORRT_LOGGING_H
-#define TENSORRT_LOGGING_H
+#ifndef __FACERECOGNITION_TENSORRT_LOGGING_H
+#define __FACERECOGNITION_TENSORRT_LOGGING_H
 
 #include "NvInferRuntimeCommon.h"
 #include <cassert>

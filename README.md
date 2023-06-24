@@ -3,11 +3,13 @@
 如果觉得有用，不妨给个Star⭐️🌟支持一下吧~ 谢谢！
 # FaceAlgorithm
 ## 特性
-1. 人脸检测(retinaface,yolov5face),人脸旋转角度计算(俯仰角，偏航角)，人脸矫正，人脸识别，带口罩识别，年龄性别识别，静默活体识别;
-2. 使用C++和TensorRT加速;
-3. 根据不同的显卡型号自动生成对应的engine(如果文件夹下有其他显卡适配engine，则删除engine才能重新生成使用中的显卡对应的engien);
-4. 提供C/C++接口，可以直接移植在项目里;
-5. 人脸识别流程:
+1. 人脸检测(retinaface,yolov5face,yolov7face),人脸旋转角度计算(俯仰角，偏航角)，人脸矫正，人脸识别，带口罩识别，年龄性别识别，静默活体识别;
+2. 所有模型均使用C++和TensorRT加速推理,yolov7face的前后处理使用cuda加速,(其他模型加速优化也可参考);
+3. 所有模型使用C++和OnnxRuntime.OpenVINO,NCNN加速推理(TO DO);
+4. 构造类似NV Deepstream，支持多种推理框架(TensorRT,OnnxRuntime,OpenVINO,NCNN)，用于多路RTSP拉流+硬解码+Pipeline+推流(TO DO);
+5. 根据不同的显卡型号自动生成对应的engine(如果文件夹下有其他显卡适配engine，则删除engine才能重新生成使用中的显卡对应的engien);
+6. 提供C/C++接口，可以直接移植在项目里;
+7. 人脸识别一般流程:
 
 	1)人脸检测(图像、视频流)
 			
@@ -19,23 +21,24 @@
 					
 	5)人脸特征比对(人脸相似度计算)
 
-6. 条件编译测试说明
-	| 测试种类 |  启用    |  说明   |
+8. 条件编译测试说明
+	| 测试种类 |  enable    |  说明   |
 	|:----------|:----------|:----------|
-    |face_detect                       |1|           人脸检测                         |
-    |yolov5face_detect				   |1|           yolov5face 人脸检测              |
-    |face_recognition                  |1|           人脸识别（人脸特征提取）+相似度计算   |
-    |face_detect_tracker               |1|           人脸检测跟踪                      |
-    |face_detect_aligner_recognitiion  |0|           人脸检测——矫正——识别(人脸特征提取)   |
-    |mask_recognition                  |1|           口罩识别                         |
-    |gender_age_recognition            |1|           性别年龄识别                      |
-    |silnet_face_anti_spoofing         |1|           静默活体检测                      |
+   |face_detect                        |1|           人脸检测                         |
+   |yolov5face_detect				      |1|           yolov5face 人脸检测              |
+   |yolov5face_detect				      |1|           yolov7face 人脸检测              |
+   |face_recognition                   |1|           人脸识别（人脸特征提取）+相似度计算   |
+   |face_detect_tracker                |1|           人脸检测跟踪                      |
+   |face_detect_aligner_recognitiion   |0|           人脸检测——矫正——识别(人脸特征提取)   |
+   |mask_recognition                   |1|           口罩识别                         |
+   |gender_age_recognition             |1|           性别年龄识别                      |
+   |silnet_face_anti_spoofing          |1|           静默活体检测                      |
 
 ## 算法说明
 ### 1.人脸检测
 1. retinaface(mobilenet0.25，R50需要自己修改代码）
 2. yolov5face(yolov5sface，n,m,l,x需要自己转换对应的onnx)
-3. yolov7face(TO DO)
+3. yolov7face(yolov7sface,另外不同大小的模型需要自己转换)
 4. yolov8facee(TO DO))
    
 
@@ -81,6 +84,14 @@ HZFLAG Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&F
  * @return              HZFLAG
  */		
 HZFLAG Yolov5Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
+
+/** 
+   * @brief             人脸检测(yolov7_face)
+   * @param img         opencv　Mat格式
+   * @param FaceDets    人脸检测结果列表，包括人脸bbox，置信度，五个关键点坐标
+   * @return            HZFLAG
+   */		
+HZFLAG Yolov7Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
 
 /** 
  * @brief               人脸检测跟踪(视频流)
@@ -157,7 +168,9 @@ HZFLAG Release(Config& config);
 |GenderAge.onnx                        |年龄性别识别|          
 |MaskRecognition.onnx                  |口罩识别|          
 |yolov5s-face_bs=1.onnx                |yolov5s人脸检测|          
-|yolov5s-face_bs=4.onnx                |yolov5s人脸检测|        
+|yolov5s-face_bs=4.onnx                |yolov5s人脸检测|
+|yolov7s-face_bs=1.onnx                |yolov7s人脸检测|          
+|yolov7s-face_bs=4.onnx                |yolov7s人脸检测|        
 |2.7_80x80_MiniFASNetV2.onnx           |静默活体检测|           
 
 ## 2.环境
@@ -195,7 +208,9 @@ set(TensorRT_LIB "/xxx/xxx/TensorRT-8.2.5.1/lib" CACHE INTERNAL "TensorRT Librar
 2. https://github.com/wang-xinyu/tensorrtx
 3. https://github.com/minivision-ai/Silent-Face-Anti-Spoofing
 4. https://github.com/linghu8812/tensorrt_inference
-
+5. https://github.com/derronqi/yolov7-face/tree/main
+6. https://github.com/we0091234/yolov7-face-tensorrt
+   
 # Acknowledgments & Contact 
 ## 1.WeChat ID: cbp931126
 加我微信(备注：FaceAlgorithm),拉你进群

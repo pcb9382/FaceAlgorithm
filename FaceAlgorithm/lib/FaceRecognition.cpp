@@ -20,20 +20,14 @@
 #include "MaskRecognition.h"
 #include "GenderAgeRecognition.h"
 #include "SilentFaceAntiSpoofing.h"
-//类预定义
-// class Detector;
-// class Detector_Yolov5Face;
-// class Aligner;
-// class Recognition;
-// class Tracking;
-// class MaskRecognition;
-// class GenderAgeRecognition;
-// class SilentFaceAntiSpoofing;
+#include "detector_yolov7face.h"
+
 class FaceRecognition
 {
 public:
 	Detector *detector;
 	Detector_Yolov5Face *yolov5face;
+	Detector_Yolov7Face *yolov7face;
 	Aligner *aligner;
 	Recognition*recognition;
 	Tracking *tracker;
@@ -63,6 +57,15 @@ public:
 	 * @return                  HZFLAG
 	 */		
 	HZFLAG Yolov5Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
+
+	/** 
+	 * @brief                   人脸检测(yolov7_face)
+	 * @param img			    opencv　Mat格式
+	 * @param FaceDets		    人脸检测结果列表，包括人脸bbox，置信度，五个关键点坐标
+	 * @return                  HZFLAG
+	 */		
+	HZFLAG Yolov7Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
+
 	/** 
 	 * @brief                   人脸检测跟踪(视频流)
 	 * @param img			    opencv　Mat格式
@@ -189,12 +192,25 @@ HZFLAG FaceRecognition::Initialize(Config& config)
 		HZFLAG yolov5facedetect_flag=yolov5face->InitDetector_Yolov5Face(config);
 		if (yolov5facedetect_flag!=HZ_SUCCESS)
 		{
-			std::cout<<"face detect init failed"<<std::endl;
+			std::cout<<"yolov5face detect init failed"<<std::endl;
 			return yolov5facedetect_flag;
 		}
 		std::cout<<"yolov5face detect init successed!"<<std::endl;
 	}
 	
+	//yolov7face
+	if (config.yolov7face_detect_enable)
+	{
+		yolov7face=new Detector_Yolov7Face();
+		HZFLAG yolov7facedetect_flag=yolov7face->InitDetector_Yolov7Face(config);
+		if (yolov7facedetect_flag!=HZ_SUCCESS)
+		{
+			std::cout<<"yolov7face detect init failed"<<std::endl;
+			return yolov7facedetect_flag;
+		}
+		std::cout<<"yolov7face detect init successed!"<<std::endl;
+	}
+
 	//初始化人脸识别算法
 	if (config.face_recognition_enable)
 	{
@@ -343,6 +359,54 @@ HZFLAG FaceRecognition::Yolov5Face_Detect(std::vector<cv::Mat>&img, std::vector<
 	return HZ_SUCCESS;
 }
 
+
+/** 
+ * @brief                   人脸检测(yolov7_face)
+ * @param img			    opencv　Mat格式
+ * @param FaceDets		    人脸检测结果列表，包括人脸bbox，置信度，五个关键点坐标
+ * @return                  HZFLAG
+ */		
+HZFLAG FaceRecognition::Yolov7Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets)
+{
+	//人脸检测
+	std::vector<std::vector<Det>>temp_det;
+	yolov7face->Detect_Yolov7Face(img,temp_det);
+	
+	//开始对检测结果进行解析
+	//多帧图像
+	for (size_t i = 0; i < temp_det.size(); i++)
+	{
+		//每一帧图像人脸
+		std::vector<FaceDet> Temp_FaceDet;
+		for (int j=0;j<temp_det[i].size();j++)
+		{
+			FaceDet facedet;
+			InitFace(facedet);
+			facedet.bbox = temp_det[i][j].bbox;
+			facedet.confidence = temp_det[i][j].confidence;
+			facedet.label = -1;
+			cv::Point temp_keypoint[7];
+			for (int k=0;k<7;k++)
+			{
+				cv::Point2f point111;
+				point111.x = temp_det[i][j].key_points[2*k];
+				point111.y = temp_det[i][j].key_points[2*k+1];
+				facedet.key_points[2*k]=point111.x;
+				facedet.key_points[2*k+1]=point111.y;
+				temp_keypoint[k]=point111;
+			}
+			float face_params[3];    
+			Face_Angle_Cal(cv::Rect(facedet.bbox.xmin, facedet.bbox.ymin,facedet.bbox.xmax - facedet.bbox.xmin, facedet.bbox.ymax - facedet.bbox.ymin), temp_keypoint,face_params);
+			facedet.YawAngle=face_params[0];
+			facedet.PitchAngle=face_params[1];  
+			facedet.InterDis = face_params[2];
+			Temp_FaceDet.push_back(facedet);
+		}
+		FaceDets.push_back(Temp_FaceDet);
+	}
+	return HZ_SUCCESS;
+}
+
 /** 
  * @brief                   人脸检测跟踪(视频流)
  * @param img			    opencv　Mat格式
@@ -356,7 +420,6 @@ HZFLAG FaceRecognition::Face_Detect_Tracker(std::vector<cv::Mat>&img, std::vecto
 	detector->detect(img,temp_det);
 	//开始对检测结果进行解析
 	//多帧图像
-	
 	for (size_t i = 0; i < temp_det.size(); i++)
 	{
 		std::vector<Object> objects;
@@ -523,6 +586,13 @@ HZFLAG FaceRecognition::Release(Config& config)
 		delete yolov5face;
 		yolov5face=NULL;
 	}
+	if (config.yolov7face_detect_enable)
+	{
+		yolov7face->ReleaseDetector_Yolov7Face();
+		delete yolov7face;
+		yolov7face=NULL;
+	}
+
 	if(config.face_recognition_enable)
 	{
 		recognition->ReleaseRecognition();
@@ -587,6 +657,17 @@ HZFLAG Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&F
 HZFLAG Yolov5Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets)
 {
 	return face_recognition.Yolov5Face_Detect(img,FaceDets);
+}
+
+/** 
+ * @brief                   人脸检测(yolov7_face)
+ * @param img			    opencv　Mat格式
+ * @param FaceDets		    人脸检测结果列表，包括人脸bbox，置信度，五个关键点坐标
+ * @return                  HZFLAG
+ */		
+HZFLAG Yolov7Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets)
+{
+	return face_recognition.Yolov7Face_Detect(img,FaceDets);
 }
 
 /** 

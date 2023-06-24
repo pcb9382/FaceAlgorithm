@@ -5,7 +5,7 @@
             "name": "(gdb) 启动",
             "type": "cppdbg",
             "request": "launch",
-            "program":"${workspaceFolder}/build/FaceRecognition_Test/FaceRecognition_Test",
+            "program":"${workspaceFolder}/build/FaceAlgorithm_Test/FaceRecognition_Test",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

@@ -91,7 +91,9 @@
         "__functional_03": "cpp",
         "*.inc": "cpp",
         "alignedvector3": "cpp",
-        "core": "cpp"
+        "core": "cpp",
+        "codecvt": "cpp",
+        "fft": "cpp"
     },
     "editor.fontSize": 12
 }

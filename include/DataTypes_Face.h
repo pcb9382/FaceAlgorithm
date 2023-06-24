@@ -82,6 +82,13 @@ typedef struct
 	float yolov5face_nms_thresh;
 	bool yolov5face_detect_enable=false;
 
+	//yolov7face detect params
+	std::string Yolov7FactDetectModelPath;
+	float yolov7face_confidence_thresh;
+	int yolov7face_detect_bs;        
+	float yolov7face_nms_thresh;
+	bool yolov7face_detect_enable=false;
+
 	//face recogniton
 	std::string FactReconitionModelPath;             
 	int face_recognition_bs;                       //人脸识别batchsize
