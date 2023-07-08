@@ -72,8 +72,6 @@ HZFLAG MaskRecognition::MaskRecognitionRun(cv::Mat&img, float&pred)
 	if (img.empty())
 		return HZ_IMGEMPTY;
 	cv::Mat pr_img = CenterCrop(img);
-	cv::Mat rgb_mat;
-	cv::cvtColor(pr_img, rgb_mat, cv::COLOR_RGB2BGR);
 	int i = 0;
 	for (int row = 0; row < INPUT_H; ++row)
 	{
