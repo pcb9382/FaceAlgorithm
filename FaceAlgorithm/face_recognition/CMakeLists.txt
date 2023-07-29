@@ -26,7 +26,11 @@ cuda_add_library(${PROJECT_NAME} SHARED ${PROJECT_SOURCE_DIR}/prelu.cu)
 find_package(OpenCV)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-target_link_libraries(${PROJECT_NAME} "/usr/local/cuda/lib64/libcudart.so")
+if (CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+    target_link_libraries(${PROJECT_NAME} "/usr/local/cuda/targets/aarch64-linux/lib/libcudart.so")
+else()
+    target_link_libraries(${PROJECT_NAME} "/usr/local/cuda/lib64/libcudart.so")
+endif()
 target_link_libraries(${PROJECT_NAME} "${TensorRT_LIB}/libnvinfer.so")
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
 

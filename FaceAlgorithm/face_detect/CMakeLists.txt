@@ -22,7 +22,12 @@ include_directories(${TensorRT_INCLUDE})
 link_directories(${TensorRT_LIB})
 
 cuda_add_library(FaceDetect SHARED ${PROJECT_SOURCE_DIR}/decode.cu face_preprocess.cu)
-target_link_libraries(${PROJECT_NAME} "/usr/local/cuda/lib64/libcudart.so")
+
+if (CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+    target_link_libraries(${PROJECT_NAME} "/usr/local/cuda/targets/aarch64-linux/lib/libcudart.so")
+else()
+    target_link_libraries(${PROJECT_NAME} "/usr/local/cuda/lib64/libcudart.so")
+endif()
 target_link_libraries(${PROJECT_NAME} "${TensorRT_LIB}/libnvinfer.so")
 include_directories(${OpenCV_INCLUDE_DIRS})
 

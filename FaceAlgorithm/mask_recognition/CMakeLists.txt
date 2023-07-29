@@ -34,11 +34,15 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 cuda_add_library(${PROJECT_NAME} SHARED ${lib_src} ${common_src})
 
-target_link_libraries(${PROJECT_NAME} "/usr/local/cuda/lib64/libcudart.so")
+if (CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+    target_link_libraries(${PROJECT_NAME} "/usr/local/cuda/targets/aarch64-linux/lib/libcudart.so")
+else()
+    target_link_libraries(${PROJECT_NAME} "/usr/local/cuda/lib64/libcudart.so")
+endif()
 target_link_libraries(${PROJECT_NAME} "${TensorRT_LIB}/libnvinfer.so")
 target_link_libraries(${PROJECT_NAME} "${TensorRT_LIB}/libnvonnxparser.so")
 target_link_libraries(${PROJECT_NAME} "${TensorRT_LIB}/libnvinfer_plugin.so")
-target_link_libraries(${PROJECT_NAME} "${TensorRT_LIB}/libcudnn.so.8.2.1")
+target_link_libraries(${PROJECT_NAME} "${TensorRT_LIB}/libcudnn.so")
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
 target_link_libraries(${PROJECT_NAME} pthread)
 
