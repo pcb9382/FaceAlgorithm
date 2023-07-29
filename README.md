@@ -1,6 +1,14 @@
 简体中文 | [English](./FaceAlgorithm_en.md)
 
 如果觉得有用，不妨给个Star⭐️🌟支持一下吧~ 谢谢！
+
+# Acknowledgments & Contact 
+## 1.WeChat ID: cbp931126
+加我微信(备注：FaceAlgorithm),拉你进群
+## 2.QQ Group：517671804
+![](resources/QQGroup.jpeg)
+
+
 # FaceAlgorithm
 ## 特性
 1. 人脸检测(retinaface,yolov5face,yolov7face),人脸旋转角度计算(俯仰角，偏航角)，人脸矫正，人脸识别，带口罩识别，年龄性别识别，静默活体识别;
@@ -159,8 +167,10 @@ HZFLAG Silent_Face_Anti_Spoofing(cv::Mat&img, SilentFace&silentface);
 HZFLAG Release(Config& config);
 ```
 # 使用方法
-## 1.模型下载
-([Baidu Drive](https://pan.baidu.com/s/1c8NQO2cZpAqwEMbfZxsJZg) code: 5xaa)
+## 1.模型和测试数据下载
+模型 ([Baidu Drive](https://pan.baidu.com/s/1c8NQO2cZpAqwEMbfZxsJZg) code: 5xaa)
+
+测试数据 ([Baidu Drive](https://pan.baidu.com/s/1nNHUCFHza2JzAnMZhA_9gQ) code: bphn)
 | 模型 |  作用    |  说明   |
 |:----------|:----------|:----------|
 |FaceDetect.wts                        |人脸检测|        
@@ -168,9 +178,9 @@ HZFLAG Release(Config& config);
 |GenderAge.onnx                        |年龄性别识别|          
 |MaskRecognition.onnx                  |口罩识别|          
 |yolov5s-face_bs=1.onnx                |yolov5s人脸检测|          
-|yolov5s-face_bs=4.onnx                |yolov5s人脸检测|
+|yolov5s-face_bs=4.onnx                |yolov5s人脸检测| batchsize=4
 |yolov7s-face_bs=1.onnx                |yolov7s人脸检测|          
-|yolov7s-face_bs=4.onnx                |yolov7s人脸检测|        
+|yolov7s-face_bs=4.onnx                |yolov7s人脸检测| batchsize=4       
 |2.7_80x80_MiniFASNetV2.onnx           |静默活体检测|           
 
 ## 2.环境
@@ -211,8 +221,3 @@ set(TensorRT_LIB "/xxx/xxx/TensorRT-8.2.5.1/lib" CACHE INTERNAL "TensorRT Librar
 5. https://github.com/derronqi/yolov7-face/tree/main
 6. https://github.com/we0091234/yolov7-face-tensorrt
    
-# Acknowledgments & Contact 
-## 1.WeChat ID: cbp931126
-加我微信(备注：FaceAlgorithm),拉你进群
-## 2.QQ Group：517671804
-![](resources/QQGroup.jpeg)
