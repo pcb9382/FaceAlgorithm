@@ -3,9 +3,9 @@
 如果觉得有用，不妨给个Star⭐️🌟支持一下吧~ 谢谢！
 
 # Acknowledgments & Contact 
-## 1.WeChat ID: cbp931126
-加我微信(备注：FaceAlgorithm),拉你进群
-## 2.QQ Group：517671804
+### 1.WeChat ID: cbp931126
+加我微信#(备注：FaceAlgorithm),拉进群
+### 2.QQ Group：517671804
 
 
 # FaceAlgorithm
