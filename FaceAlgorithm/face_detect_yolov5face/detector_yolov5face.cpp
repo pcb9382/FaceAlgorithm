@@ -82,6 +82,10 @@ HZFLAG Detector_Yolov5Face::InitDetector_Yolov5Face(Config& config)
     CHECK(cudaMallocHost((void**)&img_host, config.yolov5face_detect_bs*MAX_IMAGE_INPUT_SIZE_THRESH * 3*sizeof(uint8_t)));
     // prepare input data cache in device memory
     CHECK(cudaMalloc((void**)&img_device, config.yolov5face_detect_bs*MAX_IMAGE_INPUT_SIZE_THRESH * 3*sizeof(uint8_t)));
+
+
+    prob=new float[config.yolov5face_detect_bs * OUTPUT_SIZE];
+
     return HZ_SUCCESS;
 }
 
@@ -91,34 +95,25 @@ HZFLAG Detector_Yolov5Face::Detect_Yolov5Face(std::vector<cv::Mat>&ImgVec,std::v
     // prepare input data ---------------------------
     int detector_batchsize=ImgVec.size();
     float* buffer_idx = (float*)buffers[inputIndex];
-    std::vector<cv::Mat> imgs_buffer(detector_batchsize);
     for (int b = 0; b < detector_batchsize; b++)
     {
         if (ImgVec[b].empty()||ImgVec[b].data==NULL) 
         {
             continue;
         }
-        imgs_buffer[b] = ImgVec[b].clone();
-        size_t  size_image = imgs_buffer[b].cols * imgs_buffer[b].rows * 3*sizeof(uint8_t);
+        ImgVec[b] = ImgVec[b].clone();
+        size_t  size_image = ImgVec[b].cols * ImgVec[b].rows * 3*sizeof(uint8_t);
         size_t  size_image_dst = INPUT_H * INPUT_W * 3*sizeof(uint8_t);
         //copy data to pinned memory
-        memcpy(img_host,imgs_buffer[b].data,size_image);
+        memcpy(img_host,ImgVec[b].data,size_image);
         //copy data to device memory
-        CHECK(cudaMemcpyAsync(img_device,img_host,size_image,cudaMemcpyHostToDevice,stream));
-        preprocess_kernel_img_yolov5_face(img_device,imgs_buffer[b].cols,imgs_buffer[b].rows, buffer_idx, INPUT_W, INPUT_H, stream);       
+        CHECK(cudaMemcpy(img_device,img_host,size_image,cudaMemcpyHostToDevice));
+        preprocess_kernel_img_yolov5_face(img_device,ImgVec[b].cols,ImgVec[b].rows, buffer_idx, INPUT_W, INPUT_H, stream);       
         buffer_idx += size_image_dst;
     }
     // Run inference
-    float *prob=new float[detector_batchsize * OUTPUT_SIZE];
+   
     doInference(*context,stream,(void**)buffers,prob,detector_batchsize);
-    // std::fstream writetxt;
-    // writetxt.open("12.txt",std::ios::out);
-    // for (size_t k = 0; k < detector_batchsize * OUTPUT_SIZE; k++)
-    // {
-    //    writetxt<<prob[k]<<std::endl;
-    // }
-    // writetxt.close();
-
     for (int b = 0; b < detector_batchsize; b++) 
     {
         std::vector<decodeplugin_yolov5face::Detection> res;
@@ -132,25 +127,12 @@ HZFLAG Detector_Yolov5Face::Detect_Yolov5Face(std::vector<cv::Mat>&ImgVec,std::v
             }
             Det det;
             det.confidence=res[j].class_confidence;
-            get_rect_adapt_landmark(imgs_buffer[b], INPUT_W, INPUT_H, res[j].bbox, res[j].landmark,det);
+            get_rect_adapt_landmark(ImgVec[b], INPUT_W, INPUT_H, res[j].bbox, res[j].landmark,det);
             Imgdet.push_back(det);
         }
-        // for (size_t j = 0; j <  Imgdet.size(); j++)
-        // {
-        //     cv::rectangle(ImgVec[b], cv::Point( Imgdet[j].bbox.xmin,  Imgdet[j].bbox.ymin),
-        //     cv::Point( Imgdet[j].bbox.xmax,  Imgdet[j].bbox.ymax), cv::Scalar(255, 0, 0), 2, 8, 0);
-        //     cv::circle(ImgVec[b], cv::Point2f( Imgdet[j].key_points[0],  Imgdet[j].key_points[1]), 2, cv::Scalar(255, 0, 0), 1);
-        //     cv::circle(ImgVec[b], cv::Point2f( Imgdet[j].key_points[2],  Imgdet[j].key_points[3]), 2, cv::Scalar(0, 0, 255), 1);
-        //     cv::circle(ImgVec[b], cv::Point2f( Imgdet[j].key_points[4],  Imgdet[j].key_points[5]), 2, cv::Scalar(0, 255, 0), 1);
-        //     cv::circle(ImgVec[b], cv::Point2f( Imgdet[j].key_points[6],  Imgdet[j].key_points[7]), 2, cv::Scalar(255, 0, 255), 1);
-        //     cv::circle(ImgVec[b], cv::Point2f( Imgdet[j].key_points[8],  Imgdet[j].key_points[9]), 2, cv::Scalar(0, 255, 255), 1);
-        // }
-        // cv::imshow("show", ImgVec[b]);
-        // cv::waitKey(0);      
         dets.push_back(Imgdet);
     }
-    delete []prob;
-    prob=NULL;
+   
     return HZ_SUCCESS;
 
 }
@@ -164,6 +146,8 @@ HZFLAG Detector_Yolov5Face::ReleaseDetector_Yolov5Face()
     context->destroy();
     engine->destroy();
     runtime->destroy();
+    delete []prob;
+    prob=NULL;
     return HZ_SUCCESS;
 }
 
@@ -266,44 +250,6 @@ void Detector_Yolov5Face::nms(std::vector<decodeplugin_yolov5face::Detection>& r
     }
   }
 }
-
-// void Detector_Yolov5Face::get_rect_adapt_landmark(cv::Mat& img, int input_w, int input_h, float bbox[4], float lmk[10],Det&det) 
-// {
-//     int l, r, t, b;
-//     float r_w = input_w / (img.cols * 1.0);
-//     float r_h = input_h / (img.rows * 1.0);
-//     if (r_h > r_w) 
-//     {
-//         l = bbox[0] / r_w;
-//         r = bbox[2] / r_w;
-//         t = (bbox[1] - (input_h - r_w * img.rows) / 2) / r_w;
-//         b = (bbox[3] - (input_h - r_w * img.rows) / 2) / r_w;
-//         for (int i = 0; i < 10; i += 2) 
-//         {
-//             det.key_points.push_back(lmk[i]/r_w);
-//             det.key_points.push_back((lmk[i + 1] - (input_h - r_w * img.rows) / 2) / r_w);
-//         }
-//     } 
-//     else 
-//     {
-//         l = (bbox[0] - (input_w - r_h * img.cols) / 2) / r_h;
-//         r = (bbox[2] - (input_w - r_h * img.cols) / 2) / r_h;
-//         t = bbox[1] / r_h;
-//         b = bbox[3] / r_h;
-//         for (int i = 0; i < 10; i += 2) 
-//         {
-//             det.key_points.push_back((lmk[i] - (input_w - r_h * img.cols) / 2) / r_h);
-//             det.key_points.push_back(lmk[i + 1]/r_h);
-//         }
-//     }
-//     det.bbox.xmin=l>1?l:1;
-//     det.bbox.ymin=t>1?t:1;
-//     det.bbox.xmax=r>det.bbox.xmin?r:det.bbox.xmin+1;
-//     det.bbox.xmax=det.bbox.xmax<img.cols?det.bbox.xmax:img.cols-1;
-//     det.bbox.ymax=b>det.bbox.ymin?b:det.bbox.ymin+1;
-//     det.bbox.ymax=det.bbox.ymax<img.rows?det.bbox.ymax:img.rows-1;
-//     return ;
-// }
 void Detector_Yolov5Face::get_rect_adapt_landmark(cv::Mat& img, int input_w, int input_h, float bbox[4], float lmk[10],Det&det) 
 {
     int l, r, t, b;

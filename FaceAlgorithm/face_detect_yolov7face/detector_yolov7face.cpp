@@ -109,8 +109,6 @@ HZFLAG Detector_Yolov7Face::Detect_Yolov7Face(std::vector<cv::Mat>&ImgVec,std::v
 {
   // prepare input data ---------------------------
   int detector_batchsize=ImgVec.size();
-  std::vector<cv::Mat> imgs_buffer(detector_batchsize);
-  //cv::Mat img=cv::imread("/home/pcb/FaceRecognition_Linux_Release/FaceAlgorithm/8.jpg");
   float* buffer_idx = (float*)this->buffers[inputIndex];
   for (int b = 0; b < detector_batchsize; b++)
   {
@@ -120,15 +118,14 @@ HZFLAG Detector_Yolov7Face::Detect_Yolov7Face(std::vector<cv::Mat>&ImgVec,std::v
     }
     //proprecess
     affineMatrix afmt;
-    imgs_buffer[b] = ImgVec[b].clone();
-    getd2i(afmt,cv::Size(INPUT_W,INPUT_H),cv::Size(imgs_buffer[b].cols,imgs_buffer[b].rows));
-    size_t size_image = imgs_buffer[b].cols * imgs_buffer[b].rows * 3*sizeof(uint8_t);
+    getd2i(afmt,cv::Size(INPUT_W,INPUT_H),cv::Size(ImgVec[b].cols,ImgVec[b].rows));
+    size_t size_image = ImgVec[b].cols * ImgVec[b].rows * 3*sizeof(uint8_t);
     size_t size_image_dst = INPUT_H * INPUT_W * 3*sizeof(uint8_t);
     memcpy(affine_matrix_d2i_host,afmt.d2i,sizeof(afmt.d2i));
-    memcpy(img_host, imgs_buffer[b].data, size_image);
-    CHECK(cudaMemcpyAsync(img_device, img_host, size_image, cudaMemcpyHostToDevice, stream));
-    CHECK(cudaMemcpyAsync(affine_matrix_d2i_device[b],affine_matrix_d2i_host,sizeof(afmt.d2i),cudaMemcpyHostToDevice,stream));
-    yolov7face_preprocess_kernel_img(img_device, imgs_buffer[b].cols, imgs_buffer[b].rows, buffer_idx, INPUT_W, INPUT_H,affine_matrix_d2i_device[b], stream);
+    memcpy(img_host, ImgVec[b].data, size_image);
+    CHECK(cudaMemcpy(img_device, img_host, size_image, cudaMemcpyHostToDevice));
+    CHECK(cudaMemcpy(affine_matrix_d2i_device[b],affine_matrix_d2i_host,sizeof(afmt.d2i),cudaMemcpyHostToDevice));
+    yolov7face_preprocess_kernel_img(img_device, ImgVec[b].cols, ImgVec[b].rows, buffer_idx, INPUT_W, INPUT_H,affine_matrix_d2i_device[b], stream);
     buffer_idx += size_image_dst;
   }
   //inference

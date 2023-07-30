@@ -386,7 +386,7 @@ HZFLAG FaceRecognition::Yolov7Face_Detect(std::vector<cv::Mat>&img, std::vector<
 			facedet.confidence = temp_det[i][j].confidence;
 			facedet.label = -1;
 			cv::Point temp_keypoint[7];
-			for (int k=0;k<7;k++)
+			for (int k=0;k<5;k++)
 			{
 				cv::Point2f point111;
 				point111.x = temp_det[i][j].key_points[2*k];

@@ -72,6 +72,7 @@ public:
     char* INPUT_BLOB_NAME;
     char* OUTPUT_BLOB_NAME;
     char *trtModelStream{nullptr};
+    float *prob=nullptr;
 
 
 public:
