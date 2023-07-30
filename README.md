@@ -6,7 +6,6 @@
 ## 1.WeChat ID: cbp931126
 加我微信(备注：FaceAlgorithm),拉你进群
 ## 2.QQ Group：517671804
-![](resources/QQGroup.jpeg)
 
 
 # FaceAlgorithm
