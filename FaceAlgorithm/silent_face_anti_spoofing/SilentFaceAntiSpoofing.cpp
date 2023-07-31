@@ -36,7 +36,7 @@ HZFLAG SilentFaceAntiSpoofing:: SilentFaceAntiSpoofingInit(Config&config)
 			return HZ_ERROR;
 		}
 		Onnx2Ttr onnx2trt;
-		onnx2trt.onnxToTRTModel(config.FaceSilentModelPath.c_str(),config.silent_face_anti_spoofing_bs,out_engine.c_str());
+		onnx2trt.onnxToTRTModel(gLogger,config.FaceSilentModelPath.c_str(),config.silent_face_anti_spoofing_bs,out_engine.c_str());
 
 	}
 	std::ifstream file(out_engine, std::ios::binary);

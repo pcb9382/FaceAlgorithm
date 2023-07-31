@@ -37,7 +37,7 @@ HZFLAG GenderAgeRecognition:: GenderAgeRecognitionInit(Config&config)
 		}
 		Onnx2Ttr onnx2trt;
 		//IHostMemory* modelStream{ nullptr };
-		onnx2trt.onnxToTRTModel(config.GenderAgeModelPath.c_str(),config.gender_age_bs,out_engine.c_str());//config.classs_path
+		onnx2trt.onnxToTRTModel(gLogger,config.GenderAgeModelPath.c_str(),config.gender_age_bs,out_engine.c_str());//config.classs_path
 		//assert(modelStream != nullptr);
 		//modelStream->destroy();
 	}

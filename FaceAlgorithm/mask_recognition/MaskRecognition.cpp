@@ -37,7 +37,7 @@ HZFLAG MaskRecognition:: MaskRecognitionInit(Config&config)
 		}
 		Onnx2Ttr onnx2trt;
 		//IHostMemory* modelStream{ nullptr };
-		onnx2trt.onnxToTRTModel(config.MaskReconitionModelPath.c_str(),1,out_engine.c_str());//config.classs_path
+		onnx2trt.onnxToTRTModel(gLogger,config.MaskReconitionModelPath.c_str(),1,out_engine.c_str());//config.classs_path
 		//assert(modelStream != nullptr);
 		//modelStream->destroy();
 	}

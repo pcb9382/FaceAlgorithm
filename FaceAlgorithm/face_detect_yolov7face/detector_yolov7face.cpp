@@ -42,7 +42,7 @@ HZFLAG Detector_Yolov7Face::InitDetector_Yolov7Face(Config& config)
     }
     Onnx2Ttr onnx2trt;
     //IHostMemory* modelStream{ nullptr };
-    onnx2trt.onnxToTRTModel(config.Yolov7FactDetectModelPath.c_str(),config.yolov7face_detect_bs,out_engine.c_str());
+    onnx2trt.onnxToTRTModel(gLogger,config.Yolov7FactDetectModelPath.c_str(),config.yolov7face_detect_bs,out_engine.c_str());
   }
   size_t size{0};
   std::ifstream file(out_engine, std::ios::binary);//out_engine"/home/pcb/FaceRecognition_Linux_Release/yolov7face_test/yolov7-face-tensorrt/yolov7s-face_batch=1.engine"
@@ -129,7 +129,8 @@ HZFLAG Detector_Yolov7Face::Detect_Yolov7Face(std::vector<cv::Mat>&ImgVec,std::v
     buffer_idx += size_image_dst;
   }
   //inference
-  (*context).enqueue(detector_batchsize,(void**)this->buffers, stream, nullptr);
+  //(*context).enqueue(detector_batchsize,(void**)this->buffers, stream, nullptr);
+  (*context).enqueueV2((void**)this->buffers, stream, nullptr);
 
   //postprocess
   float *predict = (float *)this->buffers[outputIndex];

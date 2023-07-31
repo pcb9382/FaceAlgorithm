@@ -40,7 +40,7 @@ int Onnx2Ttr::get_stream_from_file(const char* filename, unsigned char* buf, siz
   }
 }
 
-void Onnx2Ttr::onnxToTRTModel(const char* modelFile,         // name of the onnx model
+void Onnx2Ttr::onnxToTRTModel(Logger gLogger,const char* modelFile,         // name of the onnx model
     unsigned int maxBatchSize,                               // batch size - NB must be at least as large as the batch we want to run with
     const char* out_trtfile) 
 {

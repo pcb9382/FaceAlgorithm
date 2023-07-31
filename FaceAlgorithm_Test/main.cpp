@@ -14,6 +14,7 @@
 #define mask_recognition                  1           //口罩识别
 #define gender_age_recognition            1           //性别年龄识别
 #define silnet_face_anti_spoofing         1           //静默活体检测
+#define show							  1			  //显示
 
 /*-----------------------------------------
 	人脸识别流程
@@ -157,10 +158,11 @@ int main(int argc, char** argv)
 				cv::putText(RawImageVec[i], label3, cv::Point(dets[i][j].bbox.xmin, dets[i][j].bbox.ymin), cv::FONT_HERSHEY_SIMPLEX, 0.8, cv::Scalar(255, 255, 0), 2);
 				//std::cout << "yaw angle:" << dets[i][j].YawAngle<< " pitch angle:" << dets[i][j].PitchAngle<<" 瞳距:"<<dets[i][j].InterDis<< std::endl;
 			}
+#if show
 			cv::imshow("show", RawImageVec[i]);
-			cv::waitKey(1);      
-		}
-		
+			cv::waitKey(1);
+#endif      
+		}	
 	}
 	std::cout<<"face_detect test finash!"<<std::endl;
 #endif
@@ -201,7 +203,7 @@ int main(int argc, char** argv)
 		auto start = std::chrono::system_clock::now();
 		Yolov5Face_Detect(RawImageVec,dets);
 		auto end = std::chrono::system_clock::now();
-		//std::cout<<"time:"<<(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count())<<"ms"<<std::endl;
+		std::cout<<"yolov5 face detect average time:"<<(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count())/(config.yolov5face_detect_bs*1.0)<<"ms"<<std::endl;
 		for (int i = 0; i < dets.size(); i++)
 		{
 			for (size_t j = 0; j < dets[i].size(); j++)
@@ -217,8 +219,10 @@ int main(int argc, char** argv)
 				cv::putText(RawImageVec[i], label3, cv::Point(dets[i][j].bbox.xmin, dets[i][j].bbox.ymin), cv::FONT_HERSHEY_SIMPLEX, 0.8, cv::Scalar(255, 255, 0), 2);
 				//std::cout << "yaw angle:" << dets[i][j].YawAngle<< " pitch angle:" << dets[i][j].PitchAngle<<" 瞳距:"<<dets[i][j].InterDis<< std::endl;
 			}
+#if show
 			cv::imshow("show", RawImageVec[i]);
-			cv::waitKey(1);      
+			cv::waitKey(1);
+#endif      
 		}
 		
 	}
@@ -260,7 +264,7 @@ int main(int argc, char** argv)
 		auto start = std::chrono::system_clock::now();
 		Yolov7Face_Detect(RawImageVec,dets);
 		auto end = std::chrono::system_clock::now();
-		//std::cout<<"time:"<<(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count())<<"ms"<<std::endl;
+		std::cout<<"yolov7face average time:"<<(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count())/(config.yolov7face_detect_bs*1.0)<<"ms"<<std::endl;
 		for (int k = 0; k < dets.size(); k++)
 		{
 			for (size_t f = 0; f < dets[k].size(); f++)
@@ -276,8 +280,10 @@ int main(int argc, char** argv)
 				cv::putText(RawImageVec[k], label3, cv::Point(dets[k][f].bbox.xmin, dets[k][f].bbox.ymin), cv::FONT_HERSHEY_SIMPLEX, 0.4, cv::Scalar(255, 255, 0), 1);
 				//std::cout << "yaw angle:" << dets[k][f].YawAngle<< " pitch angle:" << dets[k][f].PitchAngle<<" 瞳距:"<<dets[k][f].InterDis<< std::endl;
 			}
+#if show
 			cv::imshow("show", RawImageVec[k]);
-			cv::waitKey(1);      
+			cv::waitKey(1);
+#endif
 		}
 		
 	}
@@ -324,8 +330,10 @@ int main(int argc, char** argv)
 					//std::cout << "yaw angle:" << dets[i][j].YawAngle<< " pitch angle:" << dets[i][j].PitchAngle<<" 瞳距:"<<dets[i][j].InterDis<< std::endl;
 				}        
 			}
+#if show
 			cv::imshow("show", img);
 			cv::waitKey(1);
+#endif
 		}
 		
 	}
@@ -411,8 +419,10 @@ int main(int argc, char** argv)
 		//step6.计算人脸的相似度
 		float simi2=Cal_Score(Face_Grop[0].face_feature,Face_Grop[1].face_feature);
 		std::cout<<"simi2:"<<simi2<<std::endl;
+#if show
 		cv::imshow("face",MatVec[0]);
 		cv::waitKey(0);
+#endif
 #endif
 
 

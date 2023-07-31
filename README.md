@@ -29,7 +29,7 @@
 	5)人脸特征比对(人脸相似度计算)
 
 8. 条件编译测试说明
-	| 测试种类 |  enable    |  说明   |
+	| 测试类别 |  enable    |  说明   |
 	|:----------|:----------|:----------|
    |face_detect                        |1|           人脸检测                         |
    |yolov5face_detect				      |1|           yolov5face 人脸检测              |
@@ -42,28 +42,52 @@
    |silnet_face_anti_spoofing          |1|           静默活体检测                      |
 
 ## 算法说明
-### 1.人脸检测
-1. retinaface(mobilenet0.25，R50需要自己修改代码）
-2. yolov5face(yolov5sface，n,m,l,x需要自己转换对应的onnx)
-3. yolov7face(yolov7sface,另外不同大小的模型需要自己转换)
-4. yolov8facee(TO DO))
+### 1人脸检测
+#### 1)人脸检测retinaface(mobilenet0.25,R50需要自己修改代码）
+   ![demoimg1](https://insightface.ai/assets/img/github/11513D05.jpg)
+#### 2)yolov5face(yolov5sface，n,m,l,x需要自己转换对应的onnx)
+   <img src="./resources/yolov5face_test.jpg" alt="drawing" width="800"/> 
+
+#### 3)yolov7face(yolov7sface,另外不同大小的模型需要自己转换)
+   <img src="./resources/yolov7face_test.jpg" alt="drawing" width="800"/>
+
+#### 4)yolov8facee(TO DO)
    
 
 ### 2.人脸识别
-1. arcface(R50)
-2. arcface(R101,需要自己下载模型修改代码)
+
+#### 1) arcface(R50)
+
+#### 2)arcface(R101,需要自己下载模型修改代码)
+<div align="left">
+  <img src="https://insightface.ai/assets/img/github/facerecognitionfromvideo.PNG" width="800"/>
+</div>
+
 
 ### 3.带口罩识别
-1. 分类模型
+#### 1)检测->裁剪->识别(分类)
+![demoimg1](https://insightface.ai/assets/img/github/cov_test.jpg)
 
 ### 4.年龄性别
-1. InsightFace中的年龄和性别识别;
+#### 1)人脸检测->裁剪->年龄和性别识别
+<div align="left">
+  <img src="https://insightface.ai/assets/img/github/t1_genderage.jpg" width="800"/>
+</div>
 
 ### 5.静默活体识别
-1. Silent-Face-Anti-Spoofing
+#### 1)Silent-Face-Anti-Spoofing
+   
+|  | sample| result |
+|:----------:|:----------:|:----------|
+0.jpg|<img src="./FaceAlgorithm_Test/antispoofing/0.jpg" width="300" height="300"/>|fake
+1.jpg|<img src="./FaceAlgorithm_Test/antispoofing/1.jpg" width="300" height="300"/>|fake
+2.jpg|<img src="./FaceAlgorithm_Test/antispoofing/2.jpg" width="300" height="300"/>|real
+3.jpg|<img src="./FaceAlgorithm_Test/antispoofing/3.jpg" width="300" height="300"/>|real
+4.jpg|<img src="./FaceAlgorithm_Test/antispoofing/4.jpg" width="300" height="300"/>|fake
+5.jpg|<img src="./FaceAlgorithm_Test/antispoofing/5.jpg" width="300" height="300"/>|fake
 
 ### 6.跟踪
-1. ByteTracker(加上人脸bbox和人脸关键点作为跟踪的输入，修改Bug)
+#### 1)ByteTracker(加上人脸bbox和人脸关键点作为跟踪的输入，修改Bug)
 
 ### 7.算法接口
 ```
@@ -170,16 +194,16 @@ HZFLAG Release(Config& config);
 模型 ([Baidu Drive](https://pan.baidu.com/s/1c8NQO2cZpAqwEMbfZxsJZg) code: 5xaa)
 
 测试数据 ([Baidu Drive](https://pan.baidu.com/s/1nNHUCFHza2JzAnMZhA_9gQ) code: bphn)
-| 模型 |  作用    |  说明   |
-|:----------|:----------|:----------|
+| name |  功能    |  说明   |
+|:----------:|:----------:|:----------:|
 |FaceDetect.wts                        |人脸检测|        
 |FaceRecognition.wts				   |人脸识别|       
 |GenderAge.onnx                        |年龄性别识别|          
 |MaskRecognition.onnx                  |口罩识别|          
 |yolov5s-face_bs=1.onnx                |yolov5s人脸检测|          
-|yolov5s-face_bs=4.onnx                |yolov5s人脸检测| batchsize=4
+|yolov5s-face_bs=4.onnx                |yolov5s人脸检测| bs=4
 |yolov7s-face_bs=1.onnx                |yolov7s人脸检测|          
-|yolov7s-face_bs=4.onnx                |yolov7s人脸检测| batchsize=4       
+|yolov7s-face_bs=4.onnx                |yolov7s人脸检测| bs=4       
 |2.7_80x80_MiniFASNetV2.onnx           |静默活体检测|           
 
 ## 2.环境
@@ -219,4 +243,4 @@ set(TensorRT_LIB "/xxx/xxx/TensorRT-8.2.5.1/lib" CACHE INTERNAL "TensorRT Librar
 4. https://github.com/linghu8812/tensorrt_inference
 5. https://github.com/derronqi/yolov7-face/tree/main
 6. https://github.com/we0091234/yolov7-face-tensorrt
-   
+7. https://github.com/deepinsight/insightface   

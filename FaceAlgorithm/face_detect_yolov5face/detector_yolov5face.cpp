@@ -41,8 +41,7 @@ HZFLAG Detector_Yolov5Face::InitDetector_Yolov5Face(Config& config)
            return HZ_WITHOUTMODEL;
         }
         Onnx2Ttr onnx2trt;
-		//IHostMemory* modelStream{ nullptr };
-		onnx2trt.onnxToTRTModel(config.Yolov5FactDetectModelPath.c_str(),config.yolov5face_detect_bs,out_engine.c_str());
+		    onnx2trt.onnxToTRTModel(gLogger,config.Yolov5FactDetectModelPath.c_str(),config.yolov5face_detect_bs,out_engine.c_str());
     }
     size_t size{0};
     std::ifstream file(out_engine, std::ios::binary);
@@ -97,23 +96,25 @@ HZFLAG Detector_Yolov5Face::Detect_Yolov5Face(std::vector<cv::Mat>&ImgVec,std::v
     float* buffer_idx = (float*)buffers[inputIndex];
     for (int b = 0; b < detector_batchsize; b++)
     {
-        if (ImgVec[b].empty()||ImgVec[b].data==NULL) 
-        {
-            continue;
-        }
-        ImgVec[b] = ImgVec[b].clone();
-        size_t  size_image = ImgVec[b].cols * ImgVec[b].rows * 3*sizeof(uint8_t);
-        size_t  size_image_dst = INPUT_H * INPUT_W * 3*sizeof(uint8_t);
-        //copy data to pinned memory
-        memcpy(img_host,ImgVec[b].data,size_image);
-        //copy data to device memory
-        CHECK(cudaMemcpy(img_device,img_host,size_image,cudaMemcpyHostToDevice));
-        preprocess_kernel_img_yolov5_face(img_device,ImgVec[b].cols,ImgVec[b].rows, buffer_idx, INPUT_W, INPUT_H, stream);       
-        buffer_idx += size_image_dst;
+      if (ImgVec[b].empty()||ImgVec[b].data==NULL) 
+      {
+        continue;
+      }
+      ImgVec[b] = ImgVec[b].clone();
+      size_t  size_image = ImgVec[b].cols * ImgVec[b].rows * 3*sizeof(uint8_t);
+      size_t  size_image_dst = INPUT_H * INPUT_W * 3*sizeof(uint8_t);
+      //copy data to pinned memory
+      memcpy(img_host,ImgVec[b].data,size_image);
+      //copy data to device memory
+      CHECK(cudaMemcpy(img_device,img_host,size_image,cudaMemcpyHostToDevice));
+      preprocess_kernel_img_yolov5_face(img_device,ImgVec[b].cols,ImgVec[b].rows, buffer_idx, INPUT_W, INPUT_H, stream);       
+      buffer_idx += size_image_dst;
     }
     // Run inference
-   
-    doInference(*context,stream,(void**)buffers,prob,detector_batchsize);
+    //(*context).enqueue(detector_batchsize, buffers, stream, nullptr);
+    (*context).enqueueV2(buffers, stream, nullptr);
+    CHECK(cudaMemcpyAsync(prob, buffers[1], detector_batchsize * OUTPUT_SIZE * sizeof(float), cudaMemcpyDeviceToHost, stream));
+    cudaStreamSynchronize(stream);
     for (int b = 0; b < detector_batchsize; b++) 
     {
         std::vector<decodeplugin_yolov5face::Detection> res;
