@@ -4,12 +4,12 @@ If you find it useful, you may wish to give a Star ⭐️🌟support~ Thank you!
 
 # Acknowledgments & Contact 
 ### 1.WeChat ID: cbp931126
-Add me WeChat# (Note: FaceAlgorithm) to pull you into the group
+Add me WeChat(Note: FaceAlgorithm) to pull you into the group
 ### 2.QQ Group：517671804
 
 
 # FaceAlgorithm
-## 特性
+## Features
 1. Face detection (retinaface, yolov5face, yolov7face), face rotation angle calculation (pitch angle, yaw angle), face correction, face recognition,mask recognition,age_gender recognition,silent living recognition;
 2. All models use C++ and TensorRT to accelerate inference, and the preprocess and postprocess of yolov7face uses cuda acceleration,(other model acceleration optimizations can also be referred to);
 3. All models use C++ and OnnxRuntime.OpenVINO, NCNN Accelerated Inference (TO DO);
@@ -41,40 +41,40 @@ Add me WeChat# (Note: FaceAlgorithm) to pull you into the group
    |gender_age_recognition             |1|           Gender age identification                      |
    |silnet_face_anti_spoofing          |1|           Silent living identification                      |
 
-## 算法说明
-### 1人脸检测
-#### 1)人脸检测retinaface(mobilenet0.25,R50需要自己修改代码）
+## Algorithm description
+### 1.Face detection
+#### 1)retinaface(mobilenet0.25,R50 Backbone requires your own code modifications）
    ![demoimg1](https://insightface.ai/assets/img/github/11513D05.jpg)
-#### 2)yolov5face(yolov5sface，n,m,l,x需要自己转换对应的onnx)
+#### 2)yolov5face(yolov5sface，The n,m,l,x model needs to convert the corresponding ONNX itself)
    <img src="./resources/yolov5face_test.jpg" alt="drawing" width="800"/> 
 
-#### 3)yolov7face(yolov7sface,另外不同大小的模型需要自己转换)
+#### 3)yolov7face(yolov7sface,Models of different sizes need to be converted by themselves)
    <img src="./resources/yolov7face_test.jpg" alt="drawing" width="800"/>
 
 #### 4)yolov8facee(TO DO)
    
 
-### 2.人脸识别
+### 2.Face recognition
 
 #### 1) arcface(R50)
 
-#### 2)arcface(R101,需要自己下载模型修改代码)
+#### 2)arcface(R101,You need to download the model modification code yourself)
 <div align="left">
   <img src="https://insightface.ai/assets/img/github/facerecognitionfromvideo.PNG" width="800"/>
 </div>
 
 
-### 3.带口罩识别
-#### 1)检测->裁剪->识别(分类)
+### 3.Mask identification
+#### 1)Detect->face crop->mask recognition(mask classification)
 ![demoimg1](https://insightface.ai/assets/img/github/cov_test.jpg)
 
-### 4.年龄性别
-#### 1)人脸检测->裁剪->年龄和性别识别
+### 4.gender_age recognition
+#### 1)Face detection ->face cropping->age_gender recognition
 <div align="left">
   <img src="https://insightface.ai/assets/img/github/t1_genderage.jpg" width="800"/>
 </div>
 
-### 5.静默活体识别
+### 5.Silent living identification
 #### 1)Silent-Face-Anti-Spoofing
    
 |name| sample| result |image| sample| result |
@@ -83,10 +83,10 @@ Add me WeChat# (Note: FaceAlgorithm) to pull you into the group
 2.jpg|<img src="./FaceAlgorithm_Test/antispoofing/2.jpg" width="300" height="300"/>|real|3.jpg|<img src="./FaceAlgorithm_Test/antispoofing/3.jpg" width="300" height="300"/>|real
 4.jpg|<img src="./FaceAlgorithm_Test/antispoofing/4.jpg" width="300" height="300"/>|fake|5.jpg|<img src="./FaceAlgorithm_Test/antispoofing/5.jpg" width="300" height="300"/>|fake
 
-### 6.跟踪
-#### 1)ByteTracker(加上人脸bbox和人脸关键点作为跟踪的输入，修改Bug)
+### 6.tracker
+#### 1)ByteTracker(Add face bbox and face key as input for tracking to modify bugs)
 
-### 7.算法接口
+### 7.Algorithm interface
 ```
 /** 
  * @brief               人脸初始化函数
@@ -186,45 +186,45 @@ HZFLAG Silent_Face_Anti_Spoofing(cv::Mat&img, SilentFace&silentface);
  */		
 HZFLAG Release(Config& config);
 ```
-# 使用方法
-## 1.模型和测试数据下载
-模型 ([Baidu Drive](https://pan.baidu.com/s/1c8NQO2cZpAqwEMbfZxsJZg) code: 5xaa)
+# How to use
+## 1.Model and test data download
+model ([Baidu Drive](https://pan.baidu.com/s/1c8NQO2cZpAqwEMbfZxsJZg) code: 5xaa)
 
-测试数据 ([Baidu Drive](https://pan.baidu.com/s/1nNHUCFHza2JzAnMZhA_9gQ) code: bphn)
-| name |  功能    |  说明   |
+Test data ([Baidu Drive](https://pan.baidu.com/s/1nNHUCFHza2JzAnMZhA_9gQ) code: bphn)
+| name |  function    |  description   |
 |:----------:|:----------:|:----------:|
-|FaceDetect.wts                        |人脸检测|        
-|FaceRecognition.wts				   |人脸识别|       
-|GenderAge.onnx                        |年龄性别识别|          
-|MaskRecognition.onnx                  |口罩识别|          
-|yolov5s-face_bs=1.onnx                |yolov5s人脸检测|          
-|yolov5s-face_bs=4.onnx                |yolov5s人脸检测| bs=4
-|yolov7s-face_bs=1.onnx                |yolov7s人脸检测|          
-|yolov7s-face_bs=4.onnx                |yolov7s人脸检测| bs=4       
-|2.7_80x80_MiniFASNetV2.onnx           |静默活体检测|           
+|FaceDetect.wts                        |Face detection|        
+|FaceRecognition.wts				   |Face recognition|       
+|GenderAge.onnx                        |Age gender identification|          
+|MaskRecognition.onnx                  |Mask identification|          
+|yolov5s-face_bs=1.onnx                |yolov5s Face detection|          
+|yolov5s-face_bs=4.onnx                |yolov5s Face detection| bs=4
+|yolov7s-face_bs=1.onnx                |yolov7s Face detection|          
+|yolov7s-face_bs=4.onnx                |yolov7s Face detection| bs=4       
+|2.7_80x80_MiniFASNetV2.onnx           |Silent living identification|           
 
-## 2.环境
-1. ubuntu20.04+cuda11.1+cudnn8.2.1+TrnsorRT8.2.5.1(测试通过)
-2. ubuntu18.04+cuda10.2+cudnn8.2.1+TrnsorRT8.2.5.1(测试通过)
-3. Win10+cuda11.1+cudnn8.2.1+TrnsorRT8.2.5.1      (测试通过)
-4. 其他环境请自行尝试或者加群了解
+## 2.environment
+1. ubuntu20.04+cuda11.1+cudnn8.2.1+TrnsorRT8.2.5.1(Test passed)
+2. ubuntu18.04+cuda10.2+cudnn8.2.1+TrnsorRT8.2.5.1(Test passed)
+3. Win10+cuda11.1+cudnn8.2.1+TrnsorRT8.2.5.1      (Test passed)
+4. For other environments, please try it yourself or join a group to understand
 
 
-## 3.编译
+## 3.compilation
 
-1. 更改根目录下的CMakeLists.txt,设置tensorrt的安装目录
+1. Change the CMakeLists .txt in the root directory and set the directory where tensorrt is installed
 ```
 set(TensorRT_INCLUDE "/xxx/xxx/TensorRT-8.2.5.1/include" CACHE INTERNAL "TensorRT Library include location")
 set(TensorRT_LIB "/xxx/xxx/TensorRT-8.2.5.1/lib" CACHE INTERNAL "TensorRT Library lib location")
 ```
-2. 默认opencv已安装，cuda,cudnn已安装
-3. 为了Debug默认编译 ```-g O0``` 版本,如果为了加快速度请编译Release版本
+2. By default, OpenCV is installed, CUDA, CUDNN are installed
+3. In order to debug the ```-g o0``` version is compiled by default, if you want to speed things up, compile the release version
 
-4. 使用Visual Studio Code快捷键编译(4,5二选其一):
+4. Compile using Visual Studio Code shortcuts (choose one of 4,5):
 ```
    ctrl+shift+B
 ```
-5. 使用命令行编译(4,5二选其一):
+5. Compile using the command line (choose one of 4,5):
 ```
    mkdir build
    cd build
