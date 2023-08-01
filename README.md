@@ -1,4 +1,4 @@
-简体中文 | [English](./FaceAlgorithm_en.md)
+简体中文 | [English](./README_en.md)
 
 如果觉得有用，不妨给个Star⭐️🌟支持一下吧~ 谢谢！
 
