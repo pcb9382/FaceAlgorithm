@@ -45,10 +45,10 @@ Add me WeChat(Note: FaceAlgorithm) to pull you into the group
 ### 1.Face detection
 #### 1)retinaface(mobilenet0.25,R50 Backbone requires your own code modifications）
    ![demoimg1](https://insightface.ai/assets/img/github/11513D05.jpg)
-#### 2)yolov5face(yolov5sface，The n,m,l,x model needs to convert the corresponding ONNX itself)
+#### 2)yolov5face(yolov5sface(640*640)，The n,m,l,x model needs to convert the corresponding ONNX itself)
    <img src="./resources/yolov5face_test.jpg" alt="drawing" width="800"/> 
 
-#### 3)yolov7face(yolov7sface,Models of different sizes need to be converted by themselves)
+#### 3)yolov7face(yolov7sface(640*640),Models of different sizes need to be converted by themselves)
    <img src="./resources/yolov7face_test.jpg" alt="drawing" width="800"/>
 
 #### 4)yolov8facee(TO DO)
