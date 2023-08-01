@@ -45,10 +45,10 @@
 ### 1人脸检测
 #### 1)人脸检测retinaface(mobilenet0.25,R50需要自己修改代码）
    ![demoimg1](https://insightface.ai/assets/img/github/11513D05.jpg)
-#### 2)yolov5face(yolov5sface，n,m,l,x需要自己转换对应的onnx)
+#### 2)yolov5face(yolov5sface(640*640)，n,m,l,x需要自己转换对应的onnx)
    <img src="./resources/yolov5face_test.jpg" alt="drawing" width="800"/> 
 
-#### 3)yolov7face(yolov7sface,另外不同大小的模型需要自己转换)
+#### 3)yolov7face(yolov7sface(640*640),另外不同大小的模型需要自己转换)
    <img src="./resources/yolov7face_test.jpg" alt="drawing" width="800"/>
 
 #### 4)yolov8facee(TO DO)
