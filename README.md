@@ -188,9 +188,7 @@ HZFLAG Release(Config& config);
 ```
 # 使用方法
 ## 1.模型和测试数据下载
-模型 ([Baidu Drive](https://pan.baidu.com/s/1c8NQO2cZpAqwEMbfZxsJZg) code: 5xaa)
-
-测试数据 ([Baidu Drive](https://pan.baidu.com/s/1nNHUCFHza2JzAnMZhA_9gQ) code: bphn)
+模型和测试数据 ([Baidu Drive](https://pan.baidu.com/s/1ceg_0pRGEsV-HMaY6xiJzw)code: pwir)
 | name |  功能    |  说明   |
 |:----------:|:----------:|:----------:|
 |FaceDetect.wts                        |人脸检测|        

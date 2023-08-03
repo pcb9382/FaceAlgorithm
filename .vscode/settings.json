@@ -93,7 +93,9 @@
         "alignedvector3": "cpp",
         "core": "cpp",
         "codecvt": "cpp",
-        "fft": "cpp"
+        "fft": "cpp",
+        "filesystem": "cpp",
+        "stack": "cpp"
     },
-    "editor.fontSize": 12
+    "editor.fontSize": 14
 }
