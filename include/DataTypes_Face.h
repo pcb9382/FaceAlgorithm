@@ -18,6 +18,27 @@ enum HZFLAG
 	HZ_CONFIGLOADFAILED,          //configi加载失败            
 	HZ_INITFAILED,                //初始化i失败                                             
 };
+
+struct affineMatrix  //letter_box  仿射变换矩阵
+{
+    float i2d[6];       //仿射变换正变换
+    float d2i[6];       //仿射变换逆变换
+};
+struct bbox 
+{
+    float x1,x2,y1,y2;
+    float landmarks[10]; //5个关键点
+    float score;
+};
+const float color_list[5][3] =
+{
+    {255, 0, 0},
+    {0, 255, 0},
+    {0, 0, 255},
+    {0, 255, 255},
+    {255,255,0},
+};
+
 typedef struct 
 {
 	float xmin;
@@ -88,6 +109,13 @@ typedef struct
 	int yolov7face_detect_bs;        
 	float yolov7face_nms_thresh;
 	bool yolov7face_detect_enable=false;
+
+	//yolov7face detect params
+	std::string Yolov8FactDetectModelPath;
+	float yolov8face_confidence_thresh;
+	int yolov8face_detect_bs;        
+	float yolov8face_nms_thresh;
+	bool yolov8face_detect_enable=false;
 
 	//face recogniton
 	std::string FactReconitionModelPath;             

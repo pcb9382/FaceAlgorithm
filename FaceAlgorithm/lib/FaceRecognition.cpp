@@ -21,13 +21,14 @@
 #include "GenderAgeRecognition.h"
 #include "SilentFaceAntiSpoofing.h"
 #include "detector_yolov7face.h"
-
+#include "detector_yolov8face.h"
 class FaceRecognition
 {
 public:
 	Detector *detector;
 	Detector_Yolov5Face *yolov5face;
 	Detector_Yolov7Face *yolov7face;
+	Detector_Yolov8Face *yolov8face;
 	Aligner *aligner;
 	Recognition*recognition;
 	Tracking *tracker;
@@ -65,6 +66,14 @@ public:
 	 * @return                  HZFLAG
 	 */		
 	HZFLAG Yolov7Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
+
+	/** 
+	 * @brief                   人脸检测(yolov8_face)
+	 * @param img			    opencv　Mat格式
+	 * @param FaceDets		    人脸检测结果列表，包括人脸bbox，置信度，五个关键点坐标
+	 * @return                  HZFLAG
+	 */		
+	HZFLAG Yolov8Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
 
 	/** 
 	 * @brief                   人脸检测跟踪(视频流)
@@ -209,6 +218,19 @@ HZFLAG FaceRecognition::Initialize(Config& config)
 			return yolov7facedetect_flag;
 		}
 		std::cout<<"yolov7face detect init successed!"<<std::endl;
+	}
+
+	//yolov8face
+	if (config.yolov8face_detect_enable)
+	{
+		yolov8face=new Detector_Yolov8Face();
+		HZFLAG yolov8facedetect_flag=yolov8face->InitDetector_Yolov8Face(config);
+		if (yolov8facedetect_flag!=HZ_SUCCESS)
+		{
+			std::cout<<"yolov8face detect init failed"<<std::endl;
+			return yolov8facedetect_flag;
+		}
+		std::cout<<"yolov8face detect init successed!"<<std::endl;
 	}
 
 	//初始化人脸识别算法
@@ -386,6 +408,53 @@ HZFLAG FaceRecognition::Yolov7Face_Detect(std::vector<cv::Mat>&img, std::vector<
 			facedet.confidence = temp_det[i][j].confidence;
 			facedet.label = -1;
 			cv::Point temp_keypoint[7];
+			for (int k=0;k<5;k++)
+			{
+				cv::Point2f point111;
+				point111.x = temp_det[i][j].key_points[2*k];
+				point111.y = temp_det[i][j].key_points[2*k+1];
+				facedet.key_points[2*k]=point111.x;
+				facedet.key_points[2*k+1]=point111.y;
+				temp_keypoint[k]=point111;
+			}
+			float face_params[3];    
+			Face_Angle_Cal(cv::Rect(facedet.bbox.xmin, facedet.bbox.ymin,facedet.bbox.xmax - facedet.bbox.xmin, facedet.bbox.ymax - facedet.bbox.ymin), temp_keypoint,face_params);
+			facedet.YawAngle=face_params[0];
+			facedet.PitchAngle=face_params[1];  
+			facedet.InterDis = face_params[2];
+			Temp_FaceDet.push_back(facedet);
+		}
+		FaceDets.push_back(Temp_FaceDet);
+	}
+	return HZ_SUCCESS;
+}
+
+/** 
+ * @brief                   人脸检测(yolov8_face)
+ * @param img			    opencv　Mat格式
+ * @param FaceDets		    人脸检测结果列表，包括人脸bbox，置信度，五个关键点坐标
+ * @return                  HZFLAG
+ */		
+HZFLAG FaceRecognition::Yolov8Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets)
+{
+	//人脸检测
+	std::vector<std::vector<Det>>temp_det;
+	yolov8face->Detect_Yolov8Face(img,temp_det);
+	
+	//开始对检测结果进行解析
+	//多帧图像
+	for (size_t i = 0; i < temp_det.size(); i++)
+	{
+		//每一帧图像人脸
+		std::vector<FaceDet> Temp_FaceDet;
+		for (int j=0;j<temp_det[i].size();j++)
+		{
+			FaceDet facedet;
+			InitFace(facedet);
+			facedet.bbox = temp_det[i][j].bbox;
+			facedet.confidence = temp_det[i][j].confidence;
+			facedet.label = -1;
+			cv::Point temp_keypoint[8];
 			for (int k=0;k<5;k++)
 			{
 				cv::Point2f point111;
@@ -592,6 +661,12 @@ HZFLAG FaceRecognition::Release(Config& config)
 		delete yolov7face;
 		yolov7face=NULL;
 	}
+	if (config.yolov8face_detect_enable)
+	{
+		yolov8face->ReleaseDetector_Yolov8Face();
+		delete yolov8face;
+		yolov8face=NULL;
+	}
 
 	if(config.face_recognition_enable)
 	{
@@ -668,6 +743,17 @@ HZFLAG Yolov5Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceD
 HZFLAG Yolov7Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets)
 {
 	return face_recognition.Yolov7Face_Detect(img,FaceDets);
+}
+
+/** 
+ * @brief                   人脸检测(yolov8_face)
+ * @param img			    opencv　Mat格式
+ * @param FaceDets		    人脸检测结果列表，包括人脸bbox，置信度，五个关键点坐标
+ * @return                  HZFLAG
+ */		
+HZFLAG Yolov8Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets)
+{
+	return face_recognition.Yolov8Face_Detect(img,FaceDets);
 }
 
 /** 

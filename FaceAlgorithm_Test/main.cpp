@@ -8,6 +8,7 @@
 #define face_detect                       1           //人脸检测
 #define yolov5face_detect				  1           //yolov5face 人脸检测
 #define yolov7face_detect				  1           //yolov7face 人脸检测
+#define yolov8face_detect				  1           //yolov8face 人脸检测
 #define face_recognition                  1           //人脸识别（人脸特征提取）+相似度计算
 #define face_detect_tracker               1           //人脸检测跟踪
 #define face_detect_aligner_recognitiion  0           //人脸检测——矫正——识别(人脸特征提取)
@@ -42,7 +43,7 @@ struct FaceGroup
 
 int main(int argc, char** argv) 
 {
-
+	double sumtime=0.0;
 	std::string data_model_path="/home/pcb/FaceRecognition_Linux_Release/FaceAlgorithm/";
 	/**********算法初始化**************************/
 	Config config;
@@ -71,6 +72,14 @@ int main(int argc, char** argv)
 	config.yolov7face_confidence_thresh=0.1;                               //人脸检测置信度                     
 	config.yolov7face_nms_thresh = 0.1;
 	config.yolov7face_detect_enable=true;
+#endif
+
+#if yolov8face_detect
+	config.Yolov8FactDetectModelPath=data_model_path+"yolov8n-face_bs=4.onnx";
+	config.yolov8face_detect_bs=4;
+	config.yolov8face_confidence_thresh=0.1;                               //人脸检测置信度                     
+	config.yolov8face_nms_thresh = 0.4;
+	config.yolov8face_detect_enable=true;
 #endif
 
 #if face_detect_aligner_recognitiion
@@ -142,7 +151,7 @@ int main(int argc, char** argv)
 		auto start = std::chrono::system_clock::now();
 		Face_Detect(RawImageVec,dets);
 		auto end = std::chrono::system_clock::now();
-		//std::cout<<"time:"<<(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count())<<"ms"<<std::endl;
+		sumtime+=(std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
 		for (int i = 0; i < dets.size(); i++)
 		{
 			for (size_t j = 0; j < dets[i].size(); j++)
@@ -154,8 +163,8 @@ int main(int argc, char** argv)
 				cv::circle(RawImageVec[i], cv::Point2f(dets[i][j].key_points[4], dets[i][j].key_points[5]), 2, cv::Scalar(0, 255, 0), 1);
 				cv::circle(RawImageVec[i], cv::Point2f(dets[i][j].key_points[6], dets[i][j].key_points[7]), 2, cv::Scalar(255, 0, 255), 1);
 				cv::circle(RawImageVec[i], cv::Point2f(dets[i][j].key_points[8], dets[i][j].key_points[9]), 2, cv::Scalar(0, 255, 255), 1);
-				std::string label3 = cv::format("%d", dets[i][j].idx);
-				cv::putText(RawImageVec[i], label3, cv::Point(dets[i][j].bbox.xmin, dets[i][j].bbox.ymin), cv::FONT_HERSHEY_SIMPLEX, 0.8, cv::Scalar(255, 255, 0), 2);
+				std::string label3 = cv::format("%f", dets[i][j].confidence);
+				cv::putText(RawImageVec[i], label3, cv::Point(dets[i][j].bbox.xmin, dets[i][j].bbox.ymin), cv::FONT_HERSHEY_SIMPLEX, 0.4, cv::Scalar(255, 255, 0), 2);
 				//std::cout << "yaw angle:" << dets[i][j].YawAngle<< " pitch angle:" << dets[i][j].PitchAngle<<" 瞳距:"<<dets[i][j].InterDis<< std::endl;
 			}
 #if show
@@ -164,11 +173,13 @@ int main(int argc, char** argv)
 #endif      
 		}	
 	}
+	std::cout<<"retinaface average time:"<<sumtime/(config.face_detect_bs*1.0*ImageName1.size()/config.face_detect_bs)<<"us"<<std::endl;
 	std::cout<<"face_detect test finash!"<<std::endl;
 #endif
 
 
 #if yolov5face_detect
+	sumtime=0.0;
 	std::ifstream frontfin2;
 	frontfin2.open(data_model_path+"b.txt");
 	std::string str2;
@@ -203,7 +214,8 @@ int main(int argc, char** argv)
 		auto start = std::chrono::system_clock::now();
 		Yolov5Face_Detect(RawImageVec,dets);
 		auto end = std::chrono::system_clock::now();
-		std::cout<<"yolov5 face detect average time:"<<(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count())/(config.yolov5face_detect_bs*1.0)<<"ms"<<std::endl;
+		sumtime+=(std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
+		//std::cout<<"yolov5 face detect average time:"<<(std::chrono::duration_cast<std::chrono::microseconds>(end - start).count())/(config.yolov5face_detect_bs*1.0)<<"us"<<std::endl;
 		for (int i = 0; i < dets.size(); i++)
 		{
 			for (size_t j = 0; j < dets[i].size(); j++)
@@ -215,8 +227,8 @@ int main(int argc, char** argv)
 				cv::circle(RawImageVec[i], cv::Point2f(dets[i][j].key_points[4], dets[i][j].key_points[5]), 2, cv::Scalar(0, 255, 0), 1);
 				cv::circle(RawImageVec[i], cv::Point2f(dets[i][j].key_points[6], dets[i][j].key_points[7]), 2, cv::Scalar(255, 0, 255), 1);
 				cv::circle(RawImageVec[i], cv::Point2f(dets[i][j].key_points[8], dets[i][j].key_points[9]), 2, cv::Scalar(0, 255, 255), 1);
-				std::string label3 = cv::format("%d", dets[i][j].idx);
-				cv::putText(RawImageVec[i], label3, cv::Point(dets[i][j].bbox.xmin, dets[i][j].bbox.ymin), cv::FONT_HERSHEY_SIMPLEX, 0.8, cv::Scalar(255, 255, 0), 2);
+				std::string label3 = cv::format("%f", dets[i][j].confidence);
+				cv::putText(RawImageVec[i], label3, cv::Point(dets[i][j].bbox.xmin, dets[i][j].bbox.ymin), cv::FONT_HERSHEY_SIMPLEX, 0.4, cv::Scalar(255, 255, 0), 2);
 				//std::cout << "yaw angle:" << dets[i][j].YawAngle<< " pitch angle:" << dets[i][j].PitchAngle<<" 瞳距:"<<dets[i][j].InterDis<< std::endl;
 			}
 #if show
@@ -226,10 +238,12 @@ int main(int argc, char** argv)
 		}
 		
 	}
+	std::cout<<"yolov5face_detect average time:"<<sumtime/(config.yolov5face_detect_bs*1.0*ImageName1.size()/config.yolov5face_detect_bs)<<"us"<<std::endl;
 	std::cout<<"yolov5face_detect test finash!"<<std::endl;
 #endif
 
 #if yolov7face_detect
+	sumtime=0.0;
 	std::ifstream frontfin3;
 	frontfin3.open(data_model_path+"b.txt");
 	std::string str3;
@@ -264,7 +278,8 @@ int main(int argc, char** argv)
 		auto start = std::chrono::system_clock::now();
 		Yolov7Face_Detect(RawImageVec,dets);
 		auto end = std::chrono::system_clock::now();
-		std::cout<<"yolov7face average time:"<<(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count())/(config.yolov7face_detect_bs*1.0)<<"ms"<<std::endl;
+		sumtime+=(std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
+		//std::cout<<"yolov7face average time:"<<(std::chrono::duration_cast<std::chrono::microseconds>(end - start).count())/(config.yolov7face_detect_bs*1.0)<<"us"<<std::endl;
 		for (int k = 0; k < dets.size(); k++)
 		{
 			for (size_t f = 0; f < dets[k].size(); f++)
@@ -287,9 +302,73 @@ int main(int argc, char** argv)
 		}
 		
 	}
+	std::cout<<"yolov7face_detect average time:"<<sumtime/(config.yolov7face_detect_bs*1.0*ImageName1.size()/config.yolov7face_detect_bs)<<"us"<<std::endl;
 	std::cout<<"yolov7face_detect test finash!"<<std::endl;
 #endif
 
+#if yolov8face_detect
+	sumtime=0.0;
+	std::ifstream frontfin4;
+	frontfin4.open(data_model_path+"b.txt");
+	std::string str4;
+	std::vector<std::string>ImageName4;
+	while (!frontfin4.eof())
+	{
+		getline(frontfin4, str4);
+		if (str4!="")
+		{
+			ImageName4.push_back(str4);
+		}
+		else
+		{
+			continue;
+		}
+	}
+	frontfin4.close();
+	for (int i=0;i< ImageName4.size()/config.yolov8face_detect_bs;i++)
+	{
+		std::vector<cv::Mat>RawImageVec;
+		for (int j=0;j<config.yolov8face_detect_bs;j++)
+		{
+			cv::Mat img_detect = cv::imread(data_model_path+ImageName4[i*config.yolov8face_detect_bs + j]);
+			if (img_detect.data==NULL)
+			{
+				continue;
+			}
+			RawImageVec.push_back(img_detect);
+			
+		}
+		std::vector<std::vector<FaceDet>>dets;
+		auto start = std::chrono::system_clock::now();
+		Yolov8Face_Detect(RawImageVec,dets);
+		auto end = std::chrono::system_clock::now();
+		sumtime+=(std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
+		//std::cout<<"yolov8face average time:"<<(std::chrono::duration_cast<std::chrono::microseconds>(end - start).count())/(config.yolov8face_detect_bs*1.0)<<"us"<<std::endl;
+		for (int k = 0; k < dets.size(); k++)
+		{
+			for (size_t f = 0; f < dets[k].size(); f++)
+			{
+				cv::rectangle(RawImageVec[k], cv::Point(dets[k][f].bbox.xmin, dets[k][f].bbox.ymin),
+				cv::Point(dets[k][f].bbox.xmax, dets[k][f].bbox.ymax), cv::Scalar(0, 255, 0), 2, 8, 0);
+				cv::circle(RawImageVec[k], cv::Point2f(dets[k][f].key_points[0], dets[k][f].key_points[1]), 2, cv::Scalar(255, 0, 0), -1);
+				cv::circle(RawImageVec[k], cv::Point2f(dets[k][f].key_points[2], dets[k][f].key_points[3]), 2, cv::Scalar(0, 0, 255), -1);
+				cv::circle(RawImageVec[k], cv::Point2f(dets[k][f].key_points[4], dets[k][f].key_points[5]), 2, cv::Scalar(0, 255, 0), -1);
+				cv::circle(RawImageVec[k], cv::Point2f(dets[k][f].key_points[6], dets[k][f].key_points[7]), 2, cv::Scalar(255, 0, 255), -1);
+				cv::circle(RawImageVec[k], cv::Point2f(dets[k][f].key_points[8], dets[k][f].key_points[9]), 2, cv::Scalar(0, 255, 255), -1);
+				std::string label4 = cv::format("%f", dets[k][f].confidence);
+				cv::putText(RawImageVec[k], label4, cv::Point(dets[k][f].bbox.xmin, dets[k][f].bbox.ymin), cv::FONT_HERSHEY_SIMPLEX, 0.4, cv::Scalar(255, 255, 0), 1);
+				//std::cout << "yaw angle:" << dets[k][f].YawAngle<< " pitch angle:" << dets[k][f].PitchAngle<<" 瞳距:"<<dets[k][f].InterDis<< std::endl;
+			}
+#if show
+			cv::imshow("show", RawImageVec[k]);
+			cv::waitKey(1);
+#endif		
+		}
+		
+	}
+	std::cout<<"yolov8face_detect average time:"<<sumtime/(config.yolov8face_detect_bs*1.0*ImageName1.size()/config.yolov8face_detect_bs)<<"us"<<std::endl;
+	std::cout<<"yolov8face_detect test finash!"<<std::endl;
+#endif
 
 # if face_detect_tracker
 	

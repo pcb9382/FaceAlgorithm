@@ -2,6 +2,7 @@
 add_subdirectory ("face_detect")
 add_subdirectory ("face_detect_yolov5face")
 add_subdirectory ("face_detect_yolov7face")
+add_subdirectory ("face_detect_yolov8face")
 add_subdirectory ("face_recognition")
 add_subdirectory ("mask_recognition")
 add_subdirectory ("gender_age_recognition")

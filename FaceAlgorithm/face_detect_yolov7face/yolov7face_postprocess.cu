@@ -78,7 +78,7 @@ static __global__ void yolov7face_decode_kernel(float* predict,int NUM_BOX_ELEME
     *pout_item++ = left;            //1
     *pout_item++ = top;             //2
     *pout_item++ = right;           //3
-    *pout_item++ = bottom;          //4
+    *pout_item++= bottom;          //4
     *pout_item++ = confidence;      //5
     *pout_item++ = label;           //6
     *pout_item++ = 1;               //7 1 = keep, 0 = ignore

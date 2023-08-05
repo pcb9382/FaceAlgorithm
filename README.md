@@ -10,7 +10,7 @@
 
 # FaceAlgorithm
 ## 特性
-1. 人脸检测(retinaface,yolov5face,yolov7face),人脸旋转角度计算(俯仰角，偏航角)，人脸矫正，人脸识别，带口罩识别，年龄性别识别，静默活体识别;
+1. 人脸检测(retinaface,yolov5face,yolov7face,yolov8face),人脸旋转角度计算(俯仰角，偏航角)，人脸矫正，人脸识别，带口罩识别，年龄性别识别，静默活体识别;
 2. 所有模型均使用C++和TensorRT加速推理,yolov7face的前后处理使用cuda加速,(其他模型加速优化也可参考);
 3. 所有模型使用C++和OnnxRuntime.OpenVINO,NCNN加速推理(TO DO);
 4. 构造类似NV Deepstream，支持多种推理框架(TensorRT,OnnxRuntime,OpenVINO,NCNN)，用于多路RTSP拉流+硬解码+Pipeline+推流(TO DO);
@@ -33,7 +33,8 @@
 	|:----------|:----------|:----------|
    |face_detect                        |1|           人脸检测                         |
    |yolov5face_detect				      |1|           yolov5face 人脸检测              |
-   |yolov5face_detect				      |1|           yolov7face 人脸检测              |
+   |yolov7face_detect				      |1|           yolov7face 人脸检测              |
+   |yolov8face_detect				      |1|           yolov8face 人脸检测              |
    |face_recognition                   |1|           人脸识别（人脸特征提取）+相似度计算   |
    |face_detect_tracker                |1|           人脸检测跟踪                      |
    |face_detect_aligner_recognitiion   |0|           人脸检测——矫正——识别(人脸特征提取)   |
@@ -47,12 +48,57 @@
    ![demoimg1](https://insightface.ai/assets/img/github/11513D05.jpg)
 #### 2)yolov5face(yolov5sface(640*640)，n,m,l,x需要自己转换对应的onnx)
    <img src="./resources/yolov5face_test.jpg" alt="drawing" width="800"/> 
-
+   
 #### 3)yolov7face(yolov7sface(640*640),另外不同大小的模型需要自己转换)
    <img src="./resources/yolov7face_test.jpg" alt="drawing" width="800"/>
 
-#### 4)yolov8facee(TO DO)
-   
+#### 4)yolov8facee(yolov8nface(640*640),另外不同大小的模型需要自己转换)
+   <img src="./resources/yolov8nface_test.jpg" alt="drawing" width="800"/>
+
+#### 5) ***Large family***
+| Method              | Backbone       | Easy  | Medium | Hard  | \#Params(M) | \#Flops(G) |
+|:-------------------:|:--------------:|:-----:|:------:|:-----:|:-----------:|:----------:|
+| RetinaFace (CVPR20) | ResNet50       | 94.92 | 91.90  | 64.17 | 29.50       | 37.59      |
+| ***YOLOv5s***       | CSPNet         | 94.67 | 92.75  | 83.03 | 7.075       | 5.751      |
+| **YOLOv5s6**        | CSPNet         | 95.48 | 93.66  | 82.8  | 12.386      | 6.280      |
+| ***YOLOv5m***       | CSPNet         | 95.30 | 93.76  | 85.28 | 21.063      | 18.146     |
+| **YOLOv5m6**        | CSPNet         | 95.66 | 94.1   | 85.2  | 35.485      | 19.773     |
+| ***YOLOv5l***       | CSPNet         | 95.78 | 94.30  | 86.13 | 46.627      | 41.607     |
+| ***YOLOv5l6***      | CSPNet         | 96.38 | 94.90  | 85.88 | 76.674      | 45.279     |
+| ***yolov7-tiny***   | 640            | 94.7  | 92.6   | 82.1  |  13.2       | -          | 
+| ***yolov7s***       | 640            | 94.8  | 93.1   | 85.2  |  16.8       | -          |
+| ***yolov7***        | 640            | 96.9  | 95.5   | 88.0  |  103.4      | -          |
+| ***yolov7+TTA***    | 640            | 97.2  | 95.8   | 87.7  |  103.4      | -          |
+| ***yolov7-w6***     | 960            | 96.4  | 95.0   | 88.3  |  89.0       | -          |
+| ***yolov7-w6+TTA*** | 1280           | 96.9  | 95.8   | 90.4  |  89.0       | -          |
+| ***yolov8s***       | 640            | 96.0  | 94.2   | 82.6  |  -          | -          | 
+| ***yolov8m***       | 640            | 96.6  | 95.0   | 84.1  |  -          | -          |
+
+#### 6) ***Small family***
+
+| Method               | Backbone        | Easy  | Medium | Hard  | \#Params(M) | \#Flops(G) |
+| -------------------- | --------------- | ----- | ------ | ----- | ----------- | ---------- |
+| RetinaFace (CVPR20   | MobileNet0.25   | 87.78 | 81.16  | 47.32 | 0.44        | 0.802      |
+| FaceBoxes (IJCB17)   |                 | 76.17 | 57.17  | 24.18 | 1.01        | 0.275      |
+| ***YOLOv5n***        | ShuffleNetv2    | 93.74 | 91.54  | 80.32 | 1.726       | 2.111      |
+| ***YOLOv5n-0.5***    | ShuffleNetv2    | 90.76 | 88.12  | 73.82 | 0.447       | 0.571      |
+| ***yolov7-lite-t***  |                 | 88.7  | 85.2   | 71.5  |  0.8        |            |
+| ***yolov7-lite-s***  |                 | 92.7  | 89.9   | 78.5  |  3.0        |  -         |
+| ***yolov8-lite-t***  | 640             | 90.3  | 87.5   | 72.8  |  -          |  -         |
+| ***yolov8-lite-s***  | 640             | 93.4  | 91.1   | 77.7  |  -          |  -         |
+| ***yolov8n***        | 640             | 94.5  | 92.2   | 79.0  |  -          |  -         |
+#### 7) TensorRT
+
+|   Backbone   | Pytorch(1.10.0+cu102) | TensorRT_FP16(RTX2080Ti) |TensorRT_FP16(RTX3090)@640|
+| :----------: | :---------: | :---------------: |:---------------: |
+| yolov5n-0.5  |     7.7 ms     |        2.1 ms       |             |                 |
+| yolov5n-face |     7.7 ms     |        2.4 ms       |             |                 |
+| yolov5m-face |     9.9 ms     |        3.3 ms       |             |                 |
+| yolov5l-face |    15.9 ms     |        4.5 ms       |             |                 |
+| RetinaFace   |      -         |         -           |  1.38ms (前后处理+推理+人脸角度计算)     |
+| yolov5s-face |     5.6 ms     |        2.2 ms       |  1.47ms (前后处理+推理+人脸角度计算)     |
+| yolov7s-face |     -          |        -            |  1.69ms (前后处理+推理+人脸角度计算)     |
+| yolov8n-face |     -          |        -            |  1.03ms (前后处理+推理+人脸角度计算)     |
 
 ### 2.人脸识别
 
@@ -65,7 +111,7 @@
 
 
 ### 3.带口罩识别
-#### 1)检测->裁剪->识别(分类)
+#### 1)检测->裁剪->识别(分类模型)
 ![demoimg1](https://insightface.ai/assets/img/github/cov_test.jpg)
 
 ### 4.年龄性别
@@ -120,6 +166,14 @@ HZFLAG Yolov5Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceD
    * @return            HZFLAG
    */		
 HZFLAG Yolov7Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
+
+/** 
+   * @brief             人脸检测(yolov8_face)
+   * @param img         opencv　Mat格式
+   * @param FaceDets    人脸检测结果列表，包括人脸bbox，置信度，五个关键点坐标
+   * @return            HZFLAG
+   */		
+HZFLAG Yolov8Face_Detect(std::vector<cv::Mat>&img, std::vector<std::vector<FaceDet>>&FaceDets);
 
 /** 
  * @brief               人脸检测跟踪(视频流)
@@ -188,7 +242,7 @@ HZFLAG Release(Config& config);
 ```
 # 使用方法
 ## 1.模型和测试数据下载
-模型和测试数据 ([Baidu Drive](https://pan.baidu.com/s/1HbZsbxJudK8z9xsHEIXWYg)code: i9ry)
+模型和测试数据 ([Baidu Drive](https://pan.baidu.com/s/1VXhVsyQohoMjoOmOyoE5lg)code: btyj)
 | name |  功能    |  说明   |
 |:----------:|:----------:|:----------:|
 |FaceDetect.wts                        |人脸检测|        
@@ -198,7 +252,9 @@ HZFLAG Release(Config& config);
 |yolov5s-face_bs=1.onnx                |yolov5s人脸检测|          
 |yolov5s-face_bs=4.onnx                |yolov5s人脸检测| bs=4
 |yolov7s-face_bs=1.onnx                |yolov7s人脸检测|          
-|yolov7s-face_bs=4.onnx                |yolov7s人脸检测| bs=4       
+|yolov7s-face_bs=4.onnx                |yolov7s人脸检测| bs=4
+|yolov8n-face_bs=1.onnx                |yolov8n人脸检测|          
+|yolov8n-face_bs=4.onnx                |yolov8n人脸检测| bs=4        
 |2.7_80x80_MiniFASNetV2.onnx           |静默活体检测|           
 
 ## 2.环境
@@ -238,4 +294,5 @@ set(TensorRT_LIB "/xxx/xxx/TensorRT-8.2.5.1/lib" CACHE INTERNAL "TensorRT Librar
 4. https://github.com/linghu8812/tensorrt_inference
 5. https://github.com/derronqi/yolov7-face/tree/main
 6. https://github.com/we0091234/yolov7-face-tensorrt
-7. https://github.com/deepinsight/insightface   
+7. https://github.com/deepinsight/insightface
+8. https://github.com/derronqi/yolov8-face   

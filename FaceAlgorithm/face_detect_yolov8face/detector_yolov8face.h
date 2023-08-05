@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __DETECTOR_YOLOV7FACE_H__
-#define __DETECTOR_YOLOV7FACE_H__
+#ifndef __DETECTOR_YOLOV8FACE_H__
+#define __DETECTOR_YOLOV8FACE_H__
 #include <memory>
 #include <vector>
 #include <math.h>
@@ -13,8 +13,8 @@
 #include "logging.h"
 #include <dirent.h>
 #include "NvInfer.h"
-#include "yolov7face_preprocess.h"
-#include "yolov7face_postprocess.h"
+#include "yolov8face_preprocess.h"
+#include "yolov8face_postprocess.h"
 #include "ONNX2TRT.h"
 #include "DataTypes_Face.h"
 #define USE_FP16
@@ -35,33 +35,15 @@
 
 
 using namespace nvinfer1;
-// struct affineMatrix  //letter_box  仿射变换矩阵
-// {
-//     float i2d[6];       //仿射变换正变换
-//     float d2i[6];       //仿射变换逆变换
-// };
-// struct bbox 
-// {
-//     float x1,x2,y1,y2;
-//     float landmarks[10]; //5个关键点
-//     float score;
-// };
-// const float color_list[5][3] =
-// {
-//     {255, 0, 0},
-//     {0, 255, 0},
-//     {0, 0, 255},
-//     {0, 255, 255},
-//     {255,255,0},
-// };
-class Detector_Yolov7Face
+
+class Detector_Yolov8Face
 { 
 public:
-    Detector_Yolov7Face();
-    ~Detector_Yolov7Face();
-    HZFLAG InitDetector_Yolov7Face(Config&config);
-    HZFLAG Detect_Yolov7Face(std::vector<cv::Mat>&ImgVec,std::vector<std::vector<Det>>&dets);
-    HZFLAG ReleaseDetector_Yolov7Face();
+    Detector_Yolov8Face();
+    ~Detector_Yolov8Face();
+    HZFLAG InitDetector_Yolov8Face(Config&config);
+    HZFLAG Detect_Yolov8Face(std::vector<cv::Mat>&ImgVec,std::vector<std::vector<Det>>&dets);
+    HZFLAG ReleaseDetector_Yolov8Face();
 
 private:
     Logger gLogger;
@@ -79,6 +61,7 @@ private:
     float *pre_predict=nullptr;
     float **affine_matrix_d2i_device = nullptr;         //放射变换矩阵 device
     float *affine_matrix_d2i_host = nullptr;            //仿射变换矩阵 host
+    float *transpose_device=nullptr;
     int gpu_id;                                         // GPU id
     float conf_thresh;
     float nms_thresh;
@@ -91,12 +74,12 @@ private:
     int CKPT_NUM;
     int batch_size;
     int NUM_BOX_ELEMENT;
+    int OUTPUT_ELEMENT;
     int OUTPUT_CANDIDATES;
     int NUM_CLASSES;
 private:
     void affine_project(float *d2i,float x,float y,float *ox,float *oy); //通过仿射变换逆矩阵，恢复成原图的坐标
     void getd2i(affineMatrix &afmt,cv::Size  to,cv::Size from);
-    //cv::Rect get_rect_adapt_landmark1(cv::Mat& img, int input_w, int input_h, float bbox[4], float lmk[10]);
     inline bool model_exists (const std::string& name) 
     {
         std::ifstream f(name.c_str());
