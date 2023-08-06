@@ -113,6 +113,15 @@ HZFLAG Gender_Age_Recognition(cv::Mat &img,attribute&gender_age);
  */
 HZFLAG Silent_Face_Anti_Spoofing(cv::Mat&img, SilentFace&silentface);
 
+
+/** 
+ * @brief                   FaceAlignment
+ * @param img               需要检测的人脸图像
+ * @param Result            106关键点结果
+ * @return                  HZFLAG
+ */
+HZFLAG FaceAlignment(cv::Mat&img, AlignmentFace&alignmentface);
+
 /** 
  * @brief               反初始化
  * @return              HZFLAG 

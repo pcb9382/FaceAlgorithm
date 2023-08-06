@@ -6,6 +6,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program":"${workspaceFolder}/build/FaceAlgorithm_Test/FaceRecognition_Test",
+            //"program":"${workspaceFolder}/build/FaceAlgorithm/face_alignment/FaceAlginment_Test",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

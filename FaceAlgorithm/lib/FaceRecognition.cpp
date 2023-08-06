@@ -282,7 +282,6 @@ HZFLAG FaceRecognition::Initialize(Config& config)
 		}
 		std::cout<<"Silent Face Anti Spoofing init success!"<<std::endl;
 	}
-
 	std::cout<<"Initialize Finash!"<<std::endl;
 	return HZ_SUCCESS;
 }
@@ -633,8 +632,6 @@ HZFLAG FaceRecognition::Silent_Face_Anti_Spoofing(cv::Mat&img, SilentFace&silent
 {
 	return silnetface_antispoofing->SilentFaceAntiSpoofingRun(img,silentface);
 }
-
-
 /** 
  * @brief               反初始化
  * @param Feature1      经过人脸矫正的人脸图像
@@ -695,7 +692,6 @@ HZFLAG FaceRecognition::Release(Config& config)
 		delete silnetface_antispoofing;
 		silnetface_antispoofing=NULL;
 	}
-	
 	delete aligner;
 	aligner=NULL;
 	
@@ -833,7 +829,6 @@ HZFLAG Silent_Face_Anti_Spoofing(cv::Mat&img, SilentFace&silentface)
 {
 	return face_recognition.Silent_Face_Anti_Spoofing(img,silentface);
 }
-
 /** 
  * @brief               反初始化
  * @param Feature1      经过人脸矫正的人脸图像

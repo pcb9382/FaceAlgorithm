@@ -7,5 +7,6 @@ add_subdirectory ("face_recognition")
 add_subdirectory ("mask_recognition")
 add_subdirectory ("gender_age_recognition")
 add_subdirectory ("silent_face_anti_spoofing")
+add_subdirectory ("face_alignment")
 add_subdirectory("lib")
 

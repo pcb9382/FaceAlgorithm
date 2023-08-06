@@ -11,7 +11,7 @@ enum HZFLAG
 	HZ_IMGEMPTY,                  //图像为空
 	HZ_SUCCESS,                   //成功
 	HZ_ERROR,                     //失败
-	HZ_WITHOUTMODEL,               //模型不存在                                                     
+	HZ_WITHOUTMODEL,              //模型不存在                                                     
 	HZ_IMGFORMATERROR,            //图像格式错误
 	HZ_CLASSEMPTY,                //类别文件为空
 	HZ_LOGINITFAILED,             //日志初始化失败           
@@ -84,6 +84,11 @@ typedef struct
     float prob;
 }SilentFace;
 
+typedef struct
+{
+    float landmarks[212]; //106个关键点
+}AlignmentFace;
+
 //初始化的参数
 typedef struct 
 {
@@ -136,6 +141,11 @@ typedef struct
 	std::string FaceSilentModelPath;
 	int silent_face_anti_spoofing_bs;              //静默活体检测
 	bool silent_face_anti_spoofing_enable=false;
+
+	//106keypoint
+	std::string FaceAlignmentModelPath;
+	int FaceAlignment_bs;              
+	bool FaceAlignment_enable=false;
 
 	//tracker
 	float max_cosine_distance;

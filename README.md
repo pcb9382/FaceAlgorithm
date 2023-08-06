@@ -129,10 +129,22 @@
 2.jpg|<img src="./FaceAlgorithm_Test/antispoofing/2.jpg" width="300" height="300"/>|real|3.jpg|<img src="./FaceAlgorithm_Test/antispoofing/3.jpg" width="300" height="300"/>|real
 4.jpg|<img src="./FaceAlgorithm_Test/antispoofing/4.jpg" width="300" height="300"/>|fake|5.jpg|<img src="./FaceAlgorithm_Test/antispoofing/5.jpg" width="300" height="300"/>|fake
 
-### 6.跟踪
+### 6.FaceAlignment
+<p align="center">Points mark-up(ordered by point names):</p>
+<div align="center">
+	<img src="./resources/2d106markup.jpg" alt="markup" width="320">
+   <img src="./resources/C_jiaguo.gif" alt="videovis" width="272">
+</div>
+<p align="center">Image result:</p>
+<div align="center">
+	<img src="./resources/t1_out.jpg" alt="imagevis" width="800">
+</div>
+
+
+### 7.跟踪
 #### 1)ByteTracker(加上人脸bbox和人脸关键点作为跟踪的输入，修改Bug)
 
-### 7.算法接口
+# 算法接口
 ```
 /** 
  * @brief               人脸初始化函数
@@ -242,7 +254,7 @@ HZFLAG Release(Config& config);
 ```
 # 使用方法
 ## 1.模型和测试数据下载
-模型和测试数据 ([Baidu Drive](https://pan.baidu.com/s/1VXhVsyQohoMjoOmOyoE5lg)code: btyj)
+模型和测试数据 ([Baidu Drive](https://pan.baidu.com/s/1pHecUT0vIDVb4oaB7FZbqQ)code: umme)
 | name |  功能    |  说明   |
 |:----------:|:----------:|:----------:|
 |FaceDetect.wts                        |人脸检测|        
@@ -255,7 +267,8 @@ HZFLAG Release(Config& config);
 |yolov7s-face_bs=4.onnx                |yolov7s人脸检测| bs=4
 |yolov8n-face_bs=1.onnx                |yolov8n人脸检测|          
 |yolov8n-face_bs=4.onnx                |yolov8n人脸检测| bs=4        
-|2.7_80x80_MiniFASNetV2.onnx           |静默活体检测|           
+|2.7_80x80_MiniFASNetV2.onnx           |静默活体检测|
+|2d106det_bs=1.onnx                    |106keypoints|   bs=1          
 
 ## 2.环境
 1. ubuntu20.04+cuda11.1+cudnn8.2.1+TrnsorRT8.2.5.1(测试通过)

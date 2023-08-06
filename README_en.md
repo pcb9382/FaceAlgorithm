@@ -129,10 +129,21 @@ Add me WeChat(Note: FaceAlgorithm) to pull you into the group
 2.jpg|<img src="./FaceAlgorithm_Test/antispoofing/2.jpg" width="300" height="300"/>|real|3.jpg|<img src="./FaceAlgorithm_Test/antispoofing/3.jpg" width="300" height="300"/>|real
 4.jpg|<img src="./FaceAlgorithm_Test/antispoofing/4.jpg" width="300" height="300"/>|fake|5.jpg|<img src="./FaceAlgorithm_Test/antispoofing/5.jpg" width="300" height="300"/>|fake
 
-### 6.tracker
+### 6.FaceAlignment
+<p align="center">Points mark-up(ordered by point names):</p>
+<div align="center">
+	<img src="./resources/2d106markup.jpg" alt="markup" width="320">
+   <img src="./resources/C_jiaguo.gif" alt="videovis" width="272">
+</div>
+<p align="center">Image result:</p>
+<div align="center">
+	<img src="./resources/t1_out.jpg" alt="imagevis" width="800">
+</div>
+
+### 8.tracker
 #### 1)ByteTracker(Add face bbox and face key as input for tracking to modify bugs)
 
-### 7.Algorithm interface
+# Algorithm interface
 ```
 /** 
  * @brief               人脸初始化函数
@@ -241,7 +252,7 @@ HZFLAG Release(Config& config);
 ```
 # How to use
 ## 1.Model and test data download
-model and test data ([Baidu Drive](https://pan.baidu.com/s/1VXhVsyQohoMjoOmOyoE5lg)code: btyj)
+model and test data ([Baidu Drive](https://pan.baidu.com/s/1pHecUT0vIDVb4oaB7FZbqQ)code: umme)
 | name |  function    |  description   |
 |:----------:|:----------:|:----------:|
 |FaceDetect.wts                        |Face detection|        
@@ -254,7 +265,8 @@ model and test data ([Baidu Drive](https://pan.baidu.com/s/1VXhVsyQohoMjoOmOyoE5
 |yolov7s-face_bs=4.onnx                |yolov7s Face detection| bs=4
 |yolov8n-face_bs=1.onnx                |yolov8n Face detection|          
 |yolov8n-face_bs=4.onnx                |yolov8n Face detection| bs=4      
-|2.7_80x80_MiniFASNetV2.onnx           |Silent living identification|           
+|2.7_80x80_MiniFASNetV2.onnx           |Silent living identification|
+|2d106det_bs=1.onnx                    |106keypoints|           bs=1 
 
 ## 2.environment
 1. ubuntu20.04+cuda11.1+cudnn8.2.1+TrnsorRT8.2.5.1(Test passed)

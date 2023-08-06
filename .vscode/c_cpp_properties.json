@@ -16,10 +16,12 @@
         "${workspaceFolder}/FaceAlgorithm/lib",
         "${workspaceFolder}/FaceAlgorithm/face_detect_yolov5face",
         "${workspaceFolder}/FaceAlgorithm/face_detect_yolov7face",
+        "${workspaceFolder}/FaceAlgorithm/face_detect_yolov8face",
         "${workspaceFolder}/FaceAlgorithm/face_recognition",
         "${workspaceFolder}/FaceAlgorithm/gender_age_recognition",
         "${workspaceFolder}/FaceAlgorithm/mask_recognition",
         "${workspaceFolder}/FaceAlgorithm/silent_face_anti_spoofing",
+        "${workspaceFolder}/FaceAlgorithm/face_alignment",
         "${workspaceFolder}/common/*",
         "${workspaceFolder}/include/*",
         "${workspaceFolder}/include/Eigen"

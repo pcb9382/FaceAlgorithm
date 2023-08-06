@@ -536,7 +536,6 @@ int main(int argc, char** argv)
 	std::cout<<"silnet_face_anti_spoofing test finash!"<<std::endl;
 #endif
 
-
 	Release(config);
 	return 0;
 }
