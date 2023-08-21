@@ -254,7 +254,7 @@ HZFLAG Release(Config& config);
 ```
 # 使用方法
 ## 1.模型和测试数据下载
-模型和测试数据 ([Baidu Drive](https://pan.baidu.com/s/1pHecUT0vIDVb4oaB7FZbqQ)code: umme)
+模型和测试数据 ([Baidu Drive](https://pan.baidu.com/s/1bGbRmpnu8C9joaPbkLyg0A)code: cgh2)
 | name |  功能    |  说明   |
 |:----------:|:----------:|:----------:|
 |FaceDetect.wts                        |人脸检测|        

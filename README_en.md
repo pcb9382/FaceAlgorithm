@@ -252,7 +252,7 @@ HZFLAG Release(Config& config);
 ```
 # How to use
 ## 1.Model and test data download
-model and test data ([Baidu Drive](https://pan.baidu.com/s/1pHecUT0vIDVb4oaB7FZbqQ)code: umme)
+model and test data ([Baidu Drive](https://pan.baidu.com/s/1bGbRmpnu8C9joaPbkLyg0A)code: cgh2)
 | name |  function    |  description   |
 |:----------:|:----------:|:----------:|
 |FaceDetect.wts                        |Face detection|        
