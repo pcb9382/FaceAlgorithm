@@ -253,8 +253,7 @@ HZFLAG Silent_Face_Anti_Spoofing(cv::Mat&img, SilentFace&silentface);
 HZFLAG Release(Config& config);
 ```
 # 使用方法
-## 1.模型和测试数据下载
-模型和测试数据 ([Baidu Drive](https://pan.baidu.com/s/1bGbRmpnu8C9joaPbkLyg0A)code: cgh2)
+模型和测试数据 ([Baidu Drive](https://pan.baidu.com/s/1TNTDOBvzjNQwyPGxxQQ5_Q)code: wr8x)
 | name |  功能    |  说明   |
 |:----------:|:----------:|:----------:|
 |FaceDetect.wts                        |人脸检测|        
