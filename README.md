@@ -4,7 +4,7 @@
 
 # Acknowledgments & Contact 
 ### 1.WeChat ID: cbp931126
-加我微信#(备注：FaceAlgorithm),拉进群
+加我微信#(备注：FaceAlgorithm),拉进群(群里超多大佬)
 ### 2.QQ Group：517671804
 
 
